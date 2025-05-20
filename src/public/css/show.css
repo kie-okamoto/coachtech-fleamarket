@@ -1,0 +1,219 @@
+/* 共通スタイル */
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: white;
+}
+
+/* ヘッダー */
+.header {
+  background-color: #000;
+  color: #fff;
+  padding: 10px 20px;
+}
+
+.header__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.header__logo img {
+  height: 32px;
+}
+
+.header__nav a,
+.header__nav button {
+  color: #fff;
+  margin-left: 16px;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* 商品詳細レイアウト */
+.product-detail {
+  display: flex;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  gap: 40px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* 商品画像指定 */
+.product-detail__image img {
+  width: 600px;
+  height: 600px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.product-detail__info {
+  flex: 1;
+}
+
+/* 商品名サイズ */
+.product-detail__info h1 {
+  font-size: 45px;
+  margin-bottom: 16px;
+}
+
+.product-detail__info p {
+  margin: 8px 0;
+}
+
+/* ブランド名サイズ（例としてクラスを brand に）*/
+.product-detail__info .brand {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+/* 値段と税込み価格のサイズ */
+.product-detail__info .price {
+  font-size: 45px;
+  margin-bottom: 4px;
+}
+
+.price-symbol,
+.tax-label {
+  font-size: 30px;
+}
+
+.product-detail__info .tax-included {
+  font-size: 30px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+/* ☆や💬アイコンサイズ */
+.icon {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  vertical-align: middle;
+  margin-right: 8px;
+  color: black;
+}
+
+.comment-button {
+  background-color: #ff5555;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.purchase-button {
+  display: inline-block;
+  width: 570px;
+  height: 56px;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  background-color: #ff5555;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 24px;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+textarea {
+  width: 100%;
+  min-height: 80px;
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.comment {
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+}
+
+.comment__user {
+  font-weight: bold;
+}
+
+.comment__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.comment__icon {
+  width: 70px;
+  height: 70px;
+  background-color: #ccc;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.comment-textarea {
+  width: 570px;
+  height: 246px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.tag {
+  display: inline-block;
+  background-color: #eee;
+  border-radius: 12px;
+  padding: 4px 10px;
+  margin: 4px 4px 4px 0;
+  font-size: 12px;
+}
+
+/* レスポンシブ（タブレット対応） */
+@media screen and (max-width: 850px) {
+  .product-detail {
+    flex-direction: column;
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .header__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header__nav {
+    margin-top: 10px;
+  }
+
+  .header__nav a,
+  .header__nav button {
+    margin: 5px 10px 0 0;
+  }
+}
+
+/* レスポンシブ（PC 1400px未満対応） */
+@media screen and (max-width: 1400px) {
+  .product-detail {
+    max-width: 100%;
+    margin: 20px;
+  }
+}
