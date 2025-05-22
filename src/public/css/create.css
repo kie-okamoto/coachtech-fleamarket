@@ -1,11 +1,4 @@
-/* 共通 */
-body {
-  font-family: sans-serif;
-  background-color: #fff;
-  margin: 0;
-  padding: 0;
-}
-
+/* ==== 商品登録ページ本体 ==== */
 .create {
   max-width: 800px;
   margin: 40px auto;
@@ -19,21 +12,21 @@ body {
   text-align: center;
 }
 
-.form-section {
+.create .form-section {
   margin-bottom: 32px;
 }
 
-.form-section label {
+.create .form-section label {
   display: block;
   font-weight: bold;
   margin-bottom: 8px;
 }
 
-input[type="text"],
-input[type="number"],
-input[type="file"],
-select,
-textarea {
+.create input[type="text"],
+.create input[type="number"],
+.create input[type="file"],
+.create select,
+.create textarea {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -43,17 +36,17 @@ textarea {
   box-sizing: border-box;
 }
 
-textarea {
+.create textarea {
   resize: vertical;
 }
 
-.category-tags {
+.create .category-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.tag {
+.create .tag {
   background-color: #ffecec;
   border: 1px solid #f88;
   padding: 6px 12px;
@@ -62,11 +55,11 @@ textarea {
   cursor: pointer;
 }
 
-.tag input {
+.create .tag input {
   display: none;
 }
 
-.submit-button {
+.create .submit-button {
   display: block;
   width: 100%;
   background-color: #000;
@@ -76,27 +69,4 @@ textarea {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-}
-
-/* レスポンシブ対応 */
-@media screen and (max-width: 850px) {
-  .create {
-    padding: 10px;
-  }
-
-  .header__inner {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .header__search {
-    width: 100%;
-    margin: 10px 0;
-  }
-
-  .header__nav {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
 }

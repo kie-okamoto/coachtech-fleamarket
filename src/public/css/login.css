@@ -19,7 +19,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* ← register.cssと同様 */
   padding: 0 20px;
   box-sizing: border-box;
 }
