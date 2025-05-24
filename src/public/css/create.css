@@ -1,6 +1,6 @@
 /* ==== 商品登録ページ本体 ==== */
 .create {
-  max-width: 800px;
+  max-width: 680px;
   margin: 40px auto;
   padding: 20px;
 }
@@ -14,6 +14,7 @@
 
 .create .form-section {
   margin-bottom: 32px;
+  width: 100%;
 }
 
 .create .form-section label {
@@ -40,29 +41,109 @@
   resize: vertical;
 }
 
+.condition-select {
+  width: 100%;
+  max-width: 680px;
+  padding: 10px;
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.condition-select:focus {
+  background-color: black;
+  color: white;
+}
+
+/* ==== カテゴリータグ ==== */
 .create .category-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  width: 100%;
+  /* ← 親の680pxに合わせる */
+  gap: 18px 20px;
+  justify-content: flex-start;
 }
 
 .create .tag {
-  background-color: #ffecec;
-  border: 1px solid #f88;
-  padding: 6px 12px;
-  border-radius: 20px;
+  background-color: transparent;
+  border: 1.5px solid #f88;
+  padding: 0 16px;
+  height: 32px;
+  line-height: 32px;
+  border-radius: 16px;
   font-size: 13px;
   cursor: pointer;
+  color: #ff5555;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  white-space: nowrap;
 }
 
 .create .tag input {
   display: none;
 }
 
+.create .tag--selected {
+  background-color: #ff8888;
+  color: #fff;
+  border-color: #ff8888;
+}
+
+/* ==== 仕切り線 ==== */
+.create .section-divider {
+  width: 100%;
+  /* ← 親の680pxにフィット */
+  height: 2px;
+  background-color: #ccc;
+  margin: 16px auto;
+}
+
+/* ==== 商品画像アップロードエリア ==== */
+.create .image-upload-area {
+  width: 100%;
+  /* ← 親の680pxに合わせる */
+  height: 150px;
+  border: 2px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 32px;
+  position: relative;
+  background-color: transparent;
+  border-radius: 4px;
+}
+
+/* ==== ファイル選択ボタン ==== */
+.create .image-upload-button {
+  width: 165px;
+  height: 28px;
+  background-color: transparent;
+  color: #ff5555;
+  font-weight: bold;
+  font-size: 14px;
+  border: 2px solid #ff5555;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+
+.create .image-upload-area input[type="file"] {
+  display: none;
+}
+
+/* ==== 送信ボタン ==== */
 .create .submit-button {
   display: block;
   width: 100%;
-  background-color: #000;
+  background-color: #ff5555;
   color: #fff;
   padding: 12px;
   font-weight: bold;

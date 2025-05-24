@@ -8,25 +8,16 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    /**
-     * プロフィール画面の表示
-     */
-    public function mypage(Request $request)
+    public function profile(Request $request)
     {
         return view('users.profile');
     }
 
-    /**
-     * プロフィール編集フォーム表示（省略してmypage使ってもOK）
-     */
     public function editProfile()
     {
-        return view('users.profile');
+        return view('users.edit_profile');
     }
 
-    /**
-     * プロフィール更新処理
-     */
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
@@ -39,18 +30,26 @@ class UserController extends Controller
             'profile_image' => 'nullable|image|max:2048',
         ]);
 
-        // 画像がアップロードされた場合
+        // プロフィール画像の保存
         if ($request->hasFile('profile_image')) {
             $path = $request->file('profile_image')->store('profile_images', 'public');
             $user->profile_image = $path;
         }
 
+        // ユーザー名のみ更新（住所は別テーブル）
         $user->name = $validated['name'];
-        $user->postal_code = $validated['postal_code'] ?? null;
-        $user->address = $validated['address'] ?? null;
-        $user->building = $validated['building'] ?? null;
         $user->save();
 
-        return redirect()->back()->with('success', 'プロフィールを更新しました');
+        // addresses テーブルを update または create
+        $user->address()->updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'postal_code' => $validated['postal_code'] ?? '',
+                'address'     => $validated['address'] ?? '',
+                'building'    => $validated['building'] ?? '',
+            ]
+        );
+
+        return redirect()->route('index')->with('success', 'プロフィールを更新しました');
     }
 }

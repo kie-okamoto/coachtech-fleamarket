@@ -13,12 +13,11 @@
 <body>
   @include('components.header')
 
-
   <main class="profile">
     <div class="profile__user">
       <div class="profile__icon"></div>
-      <div class="profile__name">ユーザー名</div>
-      <a href="/profile/edit" class="profile__edit-button">プロフィールを編集</a>
+      <div class="profile__name">{{ Auth::user()->name }}</div>
+      <a href="{{ route('profile.edit') }}" class="profile__edit-button">プロフィールを編集</a>
     </div>
 
     <div class="tabs">

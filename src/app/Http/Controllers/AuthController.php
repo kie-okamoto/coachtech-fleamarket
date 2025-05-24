@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered; // ← 追加
 
 class AuthController extends Controller
 {
@@ -45,7 +46,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'], // 確認用含む
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
         $user = User::create([
@@ -54,12 +55,13 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        Auth::login($user); // 登録後すぐログイン
+        event(new Registered($user));
 
-        return redirect('/email/verify'); // メール認証が有効な場合
+        Auth::login($user);
+
+        return redirect('/email/verify');
     }
 
-    // ログアウト処理（任意で追加可）
     public function logout(Request $request)
     {
         Auth::logout();
