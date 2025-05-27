@@ -43,9 +43,15 @@ class Item extends Model
         return $this->hasMany(Favorite::class);
     }
 
-    // 購入者（orders テーブルがあれば）
-    public function orders()
+    // ✅ 購入者（1対1リレーション・リレーション名を修正）
+    public function order()
     {
-        return $this->hasMany(Order::class);
+        return $this->hasOne(Order::class);
+    }
+
+    // ✅ 購入済みフラグ（order()と統一）
+    public function getIsSoldAttribute()
+    {
+        return $this->order !== null;
     }
 }

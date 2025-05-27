@@ -14,36 +14,31 @@ class ItemController extends Controller
         $page = $request->query('page');
         $keyword = $request->query('keyword');
 
-        // 商品リスト初期化
         $products = collect();
 
         if (Auth::check()) {
             if ($page === 'sell') {
-                // 自分が出品した商品
                 $query = Item::where('user_id', Auth::id());
             } elseif ($page === 'buy') {
-                // 購入した商品（今後、ordersテーブルとリレーションする想定）
-                $query = Auth::user()->purchasedItems(); // ★このリレーションはUserモデルに定義が必要
+                $query = Auth::user()->purchasedItems(); // ★Userモデルにリレーション定義が必要
             } else {
-                // ログインしているがページ指定なし → 通常商品（自分以外）
                 $query = Item::where('user_id', '!=', Auth::id());
             }
 
-            // 検索条件（ログイン時）
             if ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
             }
 
-            $products = $query->get();
+            // ★ orderリレーションを事前に読み込む
+            $products = $query->with('order')->get();
         } else {
-            // 未ログイン：おすすめ（全商品）
             $query = Item::query();
 
             if ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
             }
 
-            $products = $query->get();
+            $products = $query->with('order')->get(); // ★未ログイン時も order を読み込む
         }
 
         return view('items.index', compact('products', 'keyword'));
@@ -56,10 +51,9 @@ class ItemController extends Controller
         return view('items.show', compact('item'));
     }
 
-
     public function create()
     {
-        $categories = Category::all(); // カテゴリ一覧を取得
+        $categories = Category::all();
         return view('items.create', compact('categories'));
     }
 }

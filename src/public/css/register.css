@@ -63,6 +63,18 @@ body {
   box-sizing: border-box;
 }
 
+/* 各フィールド下の個別エラー用 */
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+/* 上部のエラーメッセージ非表示に */
+.form-errors {
+  display: none;
+}
+
 /* 送信ボタン */
 .form-submit {
   background-color: #ff5a5a;
@@ -77,21 +89,6 @@ body {
 
 .form-submit:hover {
   background-color: #e64545;
-}
-
-/* エラー表示 */
-.form-errors {
-  color: red;
-  background-color: #ffeaea;
-  border: 1px solid red;
-  padding: 12px;
-  border-radius: 4px;
-  margin-bottom: 20px;
-}
-
-.form-errors ul {
-  margin: 0;
-  padding-left: 20px;
 }
 
 /* ログインリンク */

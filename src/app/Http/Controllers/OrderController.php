@@ -17,8 +17,10 @@ class OrderController extends Controller
     public function purchase($item_id)
     {
         $item = Item::findOrFail($item_id);
-        $user = Auth::user();
-        $address = $user ? $user->address : null;
+        $user = Auth::user()->load('address');
+
+        // 最新の住所を明示的に取得
+        $address = optional($user->address)->fresh();
 
         return view('orders.purchase', compact('item', 'address'));
     }
@@ -47,7 +49,7 @@ class OrderController extends Controller
     public function editAddress($item_id)
     {
         $item = Item::findOrFail($item_id);
-        $user = Auth::user();
+        $user = Auth::user()->load('address');
         $address = $user->address;
 
         return view('orders.edit_address', compact('item', 'address'));
@@ -60,17 +62,19 @@ class OrderController extends Controller
     {
         $request->validate([
             'postal_code' => 'required|string|max:8',
-            'prefecture'  => 'required|string|max:255',
-            'city'        => 'required|string|max:255',
-            'block'       => 'required|string|max:255',
+            'address'     => 'required|string|max:255',
             'building'    => 'nullable|string|max:255',
         ]);
 
         $user = Auth::user();
 
         $user->address()->updateOrCreate(
-            ['user_id' => $user->id], // 検索条件
-            $request->only(['postal_code', 'prefecture', 'city', 'block', 'building']) // 更新データ
+            ['user_id' => $user->id],
+            [
+                'postal_code' => $request->postal_code,
+                'address'     => $request->address,
+                'building'    => $request->building,
+            ]
         );
 
         return redirect()->route('purchase', ['item_id' => $item_id])

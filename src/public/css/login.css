@@ -92,6 +92,12 @@ body {
   text-decoration: underline;
 }
 
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
 /* レスポンシブ対応 */
 @media screen and (max-width: 850px) {
   .login {

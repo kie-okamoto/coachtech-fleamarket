@@ -19,38 +19,44 @@
     <form action="{{ route('address.update', $item->id) }}" method="POST" class="form">
       @csrf
 
-      <!-- 郵便番号 -->
+      {{-- 郵便番号 --}}
       <div class="form-group">
         <label for="postal_code">郵便番号</label>
-        <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code', $address->postal_code ?? '') }}">
+        <input
+          type="text"
+          name="postal_code"
+          id="postal_code"
+          value="{{ old('postal_code', $address->postal_code ?? '') }}"
+          placeholder="例：123-4567">
         @error('postal_code')
         <div class="error">{{ $message }}</div>
         @enderror
       </div>
 
-      <!-- 都道府県 -->
+      {{-- 住所 --}}
       <div class="form-group">
-        <label for="prefecture">都道府県</label>
-        <input type="text" name="prefecture" id="prefecture" value="{{ old('prefecture', $address->prefecture ?? '') }}">
-        @error('prefecture')
+        <label for="address">住所</label>
+        <input
+          type="text"
+          name="address"
+          id="address"
+          value="{{ old('address', $address->address ?? '') }}"
+          placeholder="例：東京都新宿区西新宿2-8-1">
+        @error('address')
         <div class="error">{{ $message }}</div>
         @enderror
       </div>
 
-      <!-- 市区町村 -->
+      {{-- 建物名 --}}
       <div class="form-group">
-        <label for="city">市区町村</label>
-        <input type="text" name="city" id="city" value="{{ old('city', $address->city ?? '') }}">
-        @error('city')
-        <div class="error">{{ $message }}</div>
-        @enderror
-      </div>
-
-      <!-- 番地・建物名 -->
-      <div class="form-group">
-        <label for="block">番地・建物名</label>
-        <input type="text" name="block" id="block" value="{{ old('block', $address->block ?? '') }}">
-        @error('block')
+        <label for="building">建物名</label>
+        <input
+          type="text"
+          name="building"
+          id="building"
+          value="{{ old('building', $address->building ?? '') }}"
+          placeholder="例：新宿ビル502号室（任意）">
+        @error('building')
         <div class="error">{{ $message }}</div>
         @enderror
       </div>

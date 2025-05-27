@@ -70,14 +70,7 @@
 
             <div class="summary-cell no-right-border">支払い方法</div>
             <div class="summary-cell">
-              @php
-              $methods = [
-              'convenience_store' => 'コンビニ払い',
-              'credit_card' => 'カード払い',
-              ];
-              $displayMethod = $methods[old('payment_method')] ?? '未選択';
-              @endphp
-              {{ $displayMethod }}
+              <span id="selected-payment-method">未選択</span>
             </div>
           </div>
 
@@ -85,9 +78,29 @@
             <button type="submit" class="purchase-button">購入する</button>
           </div>
         </div>
-      </div> {{-- /.purchase__content --}}
+      </div>
     </form>
   </main>
+
+  {{-- ▼ 支払い方法のリアルタイム反映 --}}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const select = document.getElementById('payment_method');
+      const display = document.getElementById('selected-payment-method');
+      const map = {
+        'convenience_store': 'コンビニ払い',
+        'credit_card': 'カード払い'
+      };
+
+      // 初期表示対応
+      const initial = select.value;
+      display.textContent = map[initial] || '未選択';
+
+      select.addEventListener('change', function() {
+        display.textContent = map[this.value] || '未選択';
+      });
+    });
+  </script>
 </body>
 
 </html>

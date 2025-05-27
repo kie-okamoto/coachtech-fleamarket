@@ -28,7 +28,7 @@
       @if (Auth::check() || request('page') !== 'mylist')
       @forelse ($products as $product)
       <div class="product-card">
-        <div class="product-image">
+        <div class="product-image"> {{-- ← クラス名を修正 --}}
           <a href="{{ route('items.show', ['item_id' => $product->id]) }}">
             <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
           </a>
@@ -45,7 +45,6 @@
       <p>マイリストを見るにはログインが必要です。</p>
       @endif
     </div>
-
   </main>
 </body>
 

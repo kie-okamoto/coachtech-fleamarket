@@ -21,38 +21,43 @@
   <main class="main">
     <h2 class="form-title">会員登録</h2>
 
-    {{-- ▼ エラーメッセージ表示 --}}
-    @if ($errors->any())
-    <div class="form-errors">
-      <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-      </ul>
-    </div>
-    @endif
-
     <form class="form" action="{{ route('register') }}" method="POST">
       @csrf
 
+      {{-- ユーザー名 --}}
       <div class="form-group">
         <label for="name">ユーザー名</label>
-        <input type="text" name="name" id="name" value="{{ old('name') }}" required>
+        <input type="text" name="name" id="name" value="{{ old('name') }}">
+        @error('name')
+        <p class="error">{{ $message }}</p>
+        @enderror
       </div>
 
+      {{-- メールアドレス --}}
       <div class="form-group">
         <label for="email">メールアドレス</label>
-        <input type="email" name="email" id="email" value="{{ old('email') }}" required>
+        <input type="email" name="email" id="email" value="{{ old('email') }}">
+        @error('email')
+        <p class="error">{{ $message }}</p>
+        @enderror
       </div>
 
+      {{-- パスワード --}}
       <div class="form-group">
         <label for="password">パスワード</label>
-        <input type="password" name="password" id="password" required>
+        <input type="password" name="password" id="password">
+        @error('password')
+        <p class="error">{{ $message }}</p>
+        @enderror
       </div>
 
+      {{-- 確認用パスワード --}}
       <div class="form-group">
         <label for="password_confirmation">確認用パスワード</label>
-        <input type="password" name="password_confirmation" id="password_confirmation" required>
+        <input type="password" name="password_confirmation" id="password_confirmation">
+        @error('password_confirmation')
+        <p class="error">{{ $message }}</p>
+        @enderror
       </div>
 
       <button type="submit" class="form-submit">登録する</button>
