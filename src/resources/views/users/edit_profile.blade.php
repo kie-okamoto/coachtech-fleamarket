@@ -57,6 +57,30 @@
       <button type="submit" class="profile__submit">更新する</button>
     </form>
   </main>
+
+  {{-- ✅ プレビュー表示用のJavaScript --}}
+  <script>
+    document.getElementById('profile_image').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = document.querySelector('.profile__image');
+        if (img) {
+          img.src = event.target.result;
+        } else {
+          const newImg = document.createElement('img');
+          newImg.classList.add('profile__image');
+          newImg.src = event.target.result;
+          document.querySelector('.profile__image-wrapper').prepend(newImg);
+          const placeholder = document.querySelector('.profile__placeholder');
+          if (placeholder) placeholder.style.display = 'none';
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
 </body>
 
 </html>

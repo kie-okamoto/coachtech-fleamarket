@@ -17,28 +17,34 @@ class ItemController extends Controller
         $products = collect();
 
         if (Auth::check()) {
+            $user = Auth::user();
+
             if ($page === 'sell') {
-                $query = Item::where('user_id', Auth::id());
+                // 自分以外の商品（おすすめ）
+                $query = Item::where('user_id', '!=', $user->id)
+                    ->with(['order', 'categories']);
             } elseif ($page === 'buy') {
-                $query = Auth::user()->purchasedItems(); // ★Userモデルにリレーション定義が必要
+                // 自分がいいねした商品（マイリスト）
+                $query = $user->favorites()->with(['order', 'categories']);
             } else {
-                $query = Item::where('user_id', '!=', Auth::id());
+                // デフォルト：全商品
+                $query = Item::with(['order', 'categories']);
             }
 
             if ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
             }
 
-            // ★ orderリレーションを事前に読み込む
-            $products = $query->with('order')->get();
+            $products = $query->get();
         } else {
-            $query = Item::query();
+            // 未ログイン：全商品（mylistは除外）
+            $query = Item::with(['order', 'categories']);
 
             if ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
             }
 
-            $products = $query->with('order')->get(); // ★未ログイン時も order を読み込む
+            $products = $query->get();
         }
 
         return view('items.index', compact('products', 'keyword'));
@@ -46,14 +52,44 @@ class ItemController extends Controller
 
     public function show($item_id)
     {
-        $item = \App\Models\Item::findOrFail($item_id);
-
+        $item = Item::with(['categories', 'comments.user', 'favoritedUsers'])->findOrFail($item_id);
         return view('items.show', compact('item'));
     }
+
 
     public function create()
     {
         $categories = Category::all();
         return view('items.create', compact('categories'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'name' => 'required|string|max:255',
+            'brand' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'condition' => 'required|string',
+            'categories' => 'required|array',
+            'categories.*' => 'exists:categories,id',
+        ]);
+
+        $imagePath = $request->file('image')->store('image', 'public');
+
+        $item = new Item();
+        $item->user_id = Auth::id();
+        $item->image = $imagePath;
+        $item->name = $request->name;
+        $item->brand = $request->brand;
+        $item->description = $request->description;
+        $item->price = $request->price;
+        $item->condition = $request->condition;
+        $item->save();
+
+        $item->categories()->sync($request->categories);
+
+        return redirect()->route('mypage', ['page' => 'sell'])->with('success', '商品を出品しました');
     }
 }

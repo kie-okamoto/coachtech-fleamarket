@@ -16,8 +16,8 @@
   <main class="main">
     <div class="tabs">
       @auth
-      <a href="{{ route('index', ['page' => 'sell']) }}" class="tab {{ request('page') === 'sell' ? 'active' : '' }}">出品した商品</a>
-      <a href="{{ route('index', ['page' => 'buy']) }}" class="tab {{ request('page') === 'buy' ? 'active' : '' }}">購入した商品</a>
+      <a href="{{ route('index', ['page' => 'sell']) }}" class="tab {{ request('page') === 'sell' ? 'active' : '' }}">おすすめ</a>
+      <a href="{{ route('index', ['page' => 'buy']) }}" class="tab {{ request('page') === 'buy' ? 'active' : '' }}">マイリスト</a>
       @else
       <a href="{{ route('index', ['page' => 'new']) }}" class="tab {{ request('page') !== 'mylist' ? 'active' : '' }}">おすすめ</a>
       <a href="{{ route('index', ['page' => 'mylist']) }}" class="tab {{ request('page') === 'mylist' ? 'active' : '' }}">マイリスト</a>
@@ -28,7 +28,7 @@
       @if (Auth::check() || request('page') !== 'mylist')
       @forelse ($products as $product)
       <div class="product-card">
-        <div class="product-image"> {{-- ← クラス名を修正 --}}
+        <div class="product-image">
           <a href="{{ route('items.show', ['item_id' => $product->id]) }}">
             <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
           </a>

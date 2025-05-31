@@ -15,9 +15,10 @@ body {
   background-color: #fff;
   border-radius: 8px;
   box-sizing: border-box;
+  flex-wrap: wrap;
 }
 
-/* 商品画像指定 */
+/* 商品画像 */
 .product-detail__image img {
   width: 600px;
   height: 600px;
@@ -27,9 +28,10 @@ body {
 
 .product-detail__info {
   flex: 1;
+  min-width: 300px;
 }
 
-/* 商品名サイズ */
+/* 商品名 */
 .product-detail__info h1 {
   font-size: 45px;
   margin-bottom: 16px;
@@ -39,13 +41,13 @@ body {
   margin: 8px 0;
 }
 
-/* ブランド名サイズ（例としてクラスを brand に）*/
+/* ブランド名 */
 .product-detail__info .brand {
   font-size: 20px;
   margin-bottom: 8px;
 }
 
-/* 値段と税込み価格のサイズ */
+/* 値段 */
 .product-detail__info .price {
   font-size: 45px;
   margin-bottom: 4px;
@@ -56,39 +58,20 @@ body {
   font-size: 30px;
 }
 
-.product-detail__info .tax-included {
-  font-size: 30px;
-  color: #666;
+.icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
   margin-bottom: 16px;
 }
 
-/* ☆や💬アイコンサイズ */
-.icon {
-  width: 40px;
-  height: 40px;
-  display: inline-block;
-  background-size: contain;
-  background-repeat: no-repeat;
-  vertical-align: middle;
-  margin-right: 8px;
-  color: black;
-}
-
-.comment-button {
-  background-color: #ff5555;
-  border: none;
-  padding: 10px 20px;
-  margin-top: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
+/* 購入ボタン */
 .purchase-button {
-  display: inline-block;
+  display: flex;
   width: 570px;
   height: 56px;
-  font-size: 30px;
+  font-size: 20px;
   font-weight: bold;
   color: white;
   background-color: #ff5555;
@@ -96,11 +79,67 @@ body {
   border-radius: 4px;
   cursor: pointer;
   margin-top: 24px;
-  text-align: center;
-  box-sizing: border-box;
-  display: flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
+}
+
+/* コメント全体枠 */
+.comment {
+  margin-top: 16px;
+}
+
+/* コメントヘッダー */
+.comment__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* コメント投稿者名 */
+.comment__user {
+  font-weight: bold;
+}
+
+/* コメントアイコン */
+.comment__icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.comment__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* コメント本文背景 */
+.comment__body-wrapper {
+  background-color: #f0f0f0;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+/* コメント本文 */
+.comment__body {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* コメント投稿欄 */
+.comment-textarea {
+  width: 570px;
+  height: 70px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  resize: none;
 }
 
 textarea {
@@ -112,41 +151,21 @@ textarea {
   border: 1px solid #ccc;
 }
 
-.comment {
-  margin-top: 16px;
-  padding: 12px;
-  background-color: #f0f0f0;
-  border-radius: 6px;
-}
-
-.comment__user {
-  font-weight: bold;
-}
-
-.comment__header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.comment__icon {
-  width: 70px;
-  height: 70px;
-  background-color: #ccc;
-  border-radius: 50%;
-  margin-right: 12px;
-}
-
-.comment-textarea {
+/* コメント送信ボタン */
+.comment-submit-button {
   width: 570px;
-  height: 246px;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-sizing: border-box;
-  resize: none;
+  height: 56px;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  background-color: #ff5555;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 16px;
 }
 
+/* タグ（カテゴリ） */
 .tag {
   display: inline-block;
   background-color: #eee;
@@ -156,3 +175,61 @@ textarea {
   font-size: 12px;
 }
 
+/* いいねボタンエリア */
+.favorite-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 16px;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 星アイコン（未いいね） */
+.heart {
+  color: #ccc;
+  font-size: 28px;
+  transition: color 0.3s ease;
+  user-select: none;
+}
+
+/* 星アイコン（いいね済み） */
+.heart.active {
+  color: gold;
+}
+
+/* コメントアイコン（💬） */
+.comment-icon {
+  font-size: 28px;
+  color: #ccc;
+  margin-left: 16px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* コメント数 */
+.comment-count {
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+/* 未ログイン時クリック誘導用 */
+.guest-only {
+  cursor: pointer;
+  color: #555;
+  font-size: 16px;
+  padding: 12px;
+  background-color: #f9f9f9;
+  border: 1px dashed #ccc;
+  border-radius: 6px;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.guest-only:hover {
+  background-color: #eee;
+}

@@ -9,6 +9,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\CommentController;
 
 // ▼ トップ画面（商品一覧・マイリスト）
 Route::get('/', [ItemController::class, 'index'])->name('index');
@@ -30,6 +32,16 @@ Route::post('/logout', function () {
 // ▼ 商品詳細
 Route::get('/item/{item_id}', [ItemController::class, 'show'])->name('items.show');
 
+// ▼ いいね機能
+Route::middleware('auth')->group(function () {
+    Route::post('/items/{item}/favorite', [FavoriteController::class, 'store'])->name('favorite.store');
+    Route::delete('/items/{item}/favorite', [FavoriteController::class, 'destroy'])->name('favorite.destroy');
+});
+
+
+// ▼ コメント機能
+Route::post('/item/{item_id}/comment', [CommentController::class, 'store'])->name('comment.store');
+
 // ▼ 商品購入
 Route::get('/purchase/{item_id}', [OrderController::class, 'purchase'])->name('purchase');
 Route::post('/purchase/{item_id}/confirm', [OrderController::class, 'confirm'])->name('purchase.confirm');
@@ -48,17 +60,11 @@ Route::get('/sell', [ItemController::class, 'create'])->middleware(['auth', 'ver
 Route::post('/sell', [ItemController::class, 'store'])->middleware(['auth', 'verified'])->name('items.store');
 
 // ▼ プロフィール画面（タブ切替付き）
-Route::get('/mypage', [UserController::class, 'profile'])
-    ->middleware(['auth', 'verified'])
-    ->name('mypage');
+Route::get('/mypage', [UserController::class, 'profile'])->middleware(['auth', 'verified'])->name('mypage');
 
 // ▼ プロフィール編集
-Route::get('/mypage/profile', [UserController::class, 'editProfile'])
-    ->middleware(['auth', 'verified'])
-    ->name('profile.edit');
-Route::post('/mypage/profile', [UserController::class, 'updateProfile'])
-    ->middleware(['auth', 'verified'])
-    ->name('profile.update');
+Route::get('/mypage/profile', [UserController::class, 'editProfile'])->middleware(['auth', 'verified'])->name('profile.edit');
+Route::post('/mypage/profile', [UserController::class, 'updateProfile'])->middleware(['auth', 'verified'])->name('profile.update');
 
 // ▼ メール認証関連
 Route::get('/email/verify', function () {

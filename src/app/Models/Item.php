@@ -16,7 +16,6 @@ class Item extends Model
         'condition',
         'price',
         'user_id',
-        'category_id',
     ];
 
     // コメントとのリレーション
@@ -32,15 +31,16 @@ class Item extends Model
     }
 
     // カテゴリとのリレーション
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class);
     }
 
+
     // お気に入り
-    public function favorites()
+    public function favoritedUsers()
     {
-        return $this->hasMany(Favorite::class);
+        return $this->belongsToMany(User::class, 'favorites', 'item_id', 'user_id')->withTimestamps();
     }
 
     // ✅ 購入者（1対1リレーション・リレーション名を修正）

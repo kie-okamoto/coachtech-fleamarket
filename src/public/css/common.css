@@ -93,6 +93,24 @@ body {
   text-decoration: none;
 }
 
+/* 商品のカテゴリ表示 */
+.product-category {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* カテゴリタグの見た目 */
+.tag {
+  display: inline-block;
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 2px 8px;
+  margin: 2px 4px 0 0;
+  font-size: 12px;
+  border-radius: 12px;
+}
+
 /* ==== RESPONSIVE タブレット（768〜850px）対応のみ ==== */
 @media screen and (min-width: 768px) and (max-width: 850px) {
   .header__inner {
@@ -124,4 +142,5 @@ body {
     height: 40px;
     text-decoration: none !important;
   }
+
 }

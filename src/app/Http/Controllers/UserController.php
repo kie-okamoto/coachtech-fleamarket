@@ -14,7 +14,15 @@ class UserController extends Controller
      */
     public function profile(Request $request)
     {
-        return view('users.profile');
+        $page = $request->query('page');
+
+        if ($page === 'buy') {
+            $items = Auth::user()->purchasedItems()->latest()->get();
+        } else {
+            $items = Auth::user()->items()->latest()->get();
+        }
+
+        return view('users.profile', compact('items'));
     }
 
     /**
@@ -44,23 +52,23 @@ class UserController extends Controller
             'profile_image' => 'nullable|image|max:2048',
         ]);
 
+        // ユーザー情報更新（名前は先に代入）
+        $user->name = $validated['name'];
+
         // プロフィール画像の処理
         if ($request->hasFile('profile_image')) {
-            // 既存画像があれば削除
             if ($user->profile_image && Storage::disk('public')->exists($user->profile_image)) {
                 Storage::disk('public')->delete($user->profile_image);
             }
 
-            // 新しい画像を保存
             $path = $request->file('profile_image')->store('profile_images', 'public');
             $user->profile_image = $path;
         }
 
-        // ユーザー情報の保存
-        $user->name = $validated['name'];
+        // ✅ 画像の有無にかかわらず必ずここで保存
         $user->save();
 
-        // 住所情報の保存・更新（1対1）
+        // 住所情報更新
         $user->address()->updateOrCreate(
             ['user_id' => $user->id],
             [

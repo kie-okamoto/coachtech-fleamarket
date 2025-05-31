@@ -19,11 +19,14 @@
     <form action="{{ route('items.store') }}" method="POST" enctype="multipart/form-data" class="create__form">
       @csrf
 
+      {{-- 商品画像 --}}
       <div class="form-section">
         <label for="image">商品画像</label>
         <div class="image-upload-area">
           <label class="image-upload-button" for="image">画像を選択する</label>
-          <input type="file" id="image" name="image">
+          <input type="file" id="image" name="image" accept="image/*">
+          {{-- プレビュー画像 --}}
+          <img id="create-preview-image" src="" alt="プレビュー画像">
         </div>
       </div>
 
@@ -35,7 +38,7 @@
         <div class="category-tags">
           @foreach($categories as $category)
           <label class="tag">
-            <input type="radio" name="category" value="{{ $category->id }}">
+            <input type="checkbox" name="categories[]" value="{{ $category->id }}">
             <span>{{ $category->name }}</span>
           </label>
           @endforeach
@@ -54,7 +57,7 @@
         </select>
       </section>
 
-      {{-- 商品名・ブランド・説明・価格 --}}
+      {{-- 商品情報 --}}
       <section class="form-section">
         <h2>商品名と説明</h2>
         <div class="section-divider"></div>
@@ -75,26 +78,44 @@
     </form>
   </main>
 
-  {{-- カテゴリー選択時の見た目反映スクリプト --}}
+  {{-- カテゴリー選択反映 + 画像プレビュー --}}
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const categoryInputs = document.querySelectorAll('.category-tags input[type="radio"]');
-      const labels = document.querySelectorAll('.category-tags .tag');
-
+      // カテゴリー選択の見た目
+      const categoryInputs = document.querySelectorAll('.category-tags input[type="checkbox"]');
       categoryInputs.forEach(input => {
         input.addEventListener('change', function() {
-          labels.forEach(label => label.classList.remove('tag--selected'));
-          this.closest('label').classList.add('tag--selected');
+          if (this.checked) {
+            this.closest('label').classList.add('tag--selected');
+          } else {
+            this.closest('label').classList.remove('tag--selected');
+          }
         });
+
+        // 初期表示時にすでにチェックされているものにスタイル付与
+        if (input.checked) {
+          input.closest('label').classList.add('tag--selected');
+        }
       });
 
-      // 初期表示時に選択済み項目にスタイル反映
-      const checked = document.querySelector('.category-tags input[type="radio"]:checked');
-      if (checked) {
-        checked.closest('label').classList.add('tag--selected');
-      }
+      // 画像プレビュー表示
+      const imageInput = document.getElementById('image');
+      const previewImage = document.getElementById('create-preview-image');
+
+      imageInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            previewImage.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        }
+      });
     });
   </script>
+
 </body>
 
 </html>

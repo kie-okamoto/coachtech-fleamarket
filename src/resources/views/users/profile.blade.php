@@ -15,24 +15,45 @@
 
   <main class="profile">
     <div class="profile__user">
-      <div class="profile__icon"></div>
+      @if (Auth::user()->profile_image)
+      <img
+        src="{{ asset('storage/' . Auth::user()->profile_image) . '?v=' . time() }}"
+        alt="プロフィール画像"
+        class="profile__icon">
+      @else
+      <div class="profile__icon profile__icon--placeholder"></div>
+      @endif
+
       <div class="profile__name">{{ Auth::user()->name }}</div>
       <a href="{{ route('profile.edit') }}" class="profile__edit-button">プロフィールを編集</a>
     </div>
 
+    {{-- タブ切り替えリンク --}}
     <div class="tabs">
-      <a href="#" class="tab active">出品した商品</a>
-      <a href="#" class="tab">購入した商品</a>
+      <a href="{{ route('mypage', ['page' => 'sell']) }}" class="tab {{ request('page') !== 'buy' ? 'active' : '' }}">出品した商品</a>
+      <a href="{{ route('mypage', ['page' => 'buy']) }}" class="tab {{ request('page') === 'buy' ? 'active' : '' }}">購入した商品</a>
     </div>
+
     <hr class="divider">
 
     <div class="product-grid">
-      @for ($i = 0; $i < 8; $i++)
-        <div class="product-card">
-        <div class="product-image">商品画像</div>
-        <p class="product-name">商品名</p>
-    </div>
-    @endfor
+      @forelse ($items as $item)
+      <div class="product-card">
+        <div class="product-image">
+          <a href="{{ route('items.show', $item->id) }}">
+            <img
+              src="{{ asset('storage/' . $item->image) }}"
+              alt="{{ $item->name }}"
+              onerror="this.src='{{ asset('images/no-image.png') }}'">
+          </a>
+        </div>
+        <p class="product-name">{{ $item->name }}</p>
+      </div>
+      @empty
+      <div class="no-items-message">
+        <p>商品がありません。</p>
+      </div>
+      @endforelse
     </div>
   </main>
 </body>
