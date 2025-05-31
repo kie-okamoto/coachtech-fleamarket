@@ -233,3 +233,27 @@ textarea {
 .guest-only:hover {
   background-color: #eee;
 }
+
+/* show.css に追加 */
+.sold-overlay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(255, 0, 0, 0.8);
+  color: white;
+  font-weight: bold;
+  padding: 6px 12px;
+  font-size: 16px;
+  z-index: 10;
+  border-radius: 4px;
+}
+
+.product-detail__image {
+  position: relative;
+}
+
+.purchase-button.disabled {
+  background-color: #ccc;
+  pointer-events: none;
+  cursor: not-allowed;
+}

@@ -19,6 +19,11 @@
 
   <main class="product-detail">
     <div class="product-detail__image">
+      {{-- SOLD表示 --}}
+      @if ($item->is_sold)
+      <div class="sold-overlay">SOLD</div>
+      @endif
+
       @php use Illuminate\Support\Str; @endphp
       <img src="{{ Str::startsWith($item->image, 'http') ? $item->image : asset('storage/' . $item->image) }}" alt="{{ $item->name }}">
     </div>
@@ -49,8 +54,13 @@
         <span class="comment-count">{{ $item->comments->count() }}</span>
       </div>
 
+      {{-- 購入ボタン --}}
       @auth
+      @if ($item->is_sold)
+      <button class="purchase-button disabled" disabled>売り切れました</button>
+      @else
       <a href="{{ route('purchase', $item->id) }}" class="purchase-button">購入手続きへ</a>
+      @endif
       @else
       <a href="{{ route('login') }}" class="purchase-button">購入手続きへ</a>
       @endauth
@@ -72,7 +82,6 @@
       <p>商品の状態：{{ $item->condition }}</p>
 
       <h2>コメント ({{ $item->comments->count() }})</h2>
-
       @foreach ($item->comments as $comment)
       <div class="comment">
         <div class="comment__header">

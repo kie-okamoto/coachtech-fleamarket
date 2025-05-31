@@ -54,4 +54,9 @@ class Item extends Model
     {
         return $this->order !== null;
     }
+
+    public function isSold()
+    {
+        return $this->order !== null;
+    }
 }
