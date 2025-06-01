@@ -57,7 +57,7 @@
       {{-- 購入ボタン --}}
       @auth
       @if ($item->is_sold)
-      <button class="purchase-button disabled" disabled>売り切れました</button>
+      <button class="purchase-button disabled" disabled>sold out</button>
       @else
       <a href="{{ route('purchase', $item->id) }}" class="purchase-button">購入手続きへ</a>
       @endif
@@ -89,7 +89,7 @@
             @if ($comment->user && $comment->user->profile_image)
             <img src="{{ asset('storage/' . $comment->user->profile_image) }}" alt="プロフィール画像">
             @else
-            <img src="{{ asset('images/no-image.png') }}" alt="ダミー画像">
+            <div class="comment__icon--placeholder"></div>
             @endif
           </div>
           <div class="comment__user">{{ $comment->user->name ?? 'ゲスト' }}</div>

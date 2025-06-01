@@ -118,6 +118,13 @@ body {
   display: block;
 }
 
+.comment__icon--placeholder {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: #ccc;
+}
+
 /* コメント本文背景 */
 .comment__body-wrapper {
   background-color: #f0f0f0;
