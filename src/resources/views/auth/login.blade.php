@@ -19,11 +19,11 @@
   <main class="login">
     <h1 class="login__title">ログイン</h1>
 
-    <form class="login__form" method="POST" action="{{ route('login') }}">
+    <form class="login__form" method="POST" action="{{ route('login') }}" novalidate>
       @csrf
       <div class="login__form-group">
         <label for="email">メールアドレス</label>
-        <input type="email" name="email" id="email" value="{{ old('email') }}">
+        <input type="text" name="email" id="email" value="{{ old('email') }}">
         @error('email')
         <p class="error">{{ $message }}</p>
         @enderror

@@ -36,7 +36,7 @@
       {{-- メールアドレス --}}
       <div class="form-group">
         <label for="email">メールアドレス</label>
-        <input type="email" name="email" id="email" value="{{ old('email') }}">
+        <input type="text" name="email" id="email" value="{{ old('email') }}">
         @error('email')
         <p class="error">{{ $message }}</p>
         @enderror

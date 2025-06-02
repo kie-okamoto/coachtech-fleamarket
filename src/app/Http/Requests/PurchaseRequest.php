@@ -15,6 +15,7 @@ class PurchaseRequest extends FormRequest
     {
         return [
             'payment_method' => ['required', 'in:credit_card,convenience_store'],
+            'delivery_address' => ['required'],
         ];
     }
 
@@ -23,6 +24,7 @@ class PurchaseRequest extends FormRequest
         return [
             'payment_method.required' => '支払い方法を選択してください。',
             'payment_method.in' => '有効な支払い方法を選択してください。',
+            'delivery_address.required' => '配送先を選択してください。',
         ];
     }
 }
