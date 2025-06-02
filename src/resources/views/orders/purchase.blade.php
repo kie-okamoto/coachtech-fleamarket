@@ -14,8 +14,9 @@
   @include('components.header')
 
   <main class="purchase">
-    <form action="{{ route('purchase.confirm', $item->id) }}" method="POST" class="purchase__form">
+    <form action="{{ route('stripe.checkout') }}" method="POST" class="purchase__form">
       @csrf
+      <input type="hidden" name="item_id" value="{{ $item->id }}">
 
       <div class="purchase__content">
         {{-- 左：商品情報・入力 --}}

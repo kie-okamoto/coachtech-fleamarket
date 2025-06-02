@@ -98,13 +98,14 @@ body {
   margin-top: 6px;
 }
 
-/* レスポンシブ対応 */
+/* レスポンシブ：タブレットサイズ（768px〜850px） */
 @media screen and (max-width: 850px) {
-  .login {
-    margin: 40px 20px;
+  .main {
+    max-width: 90%;
+    margin: 40px auto;
   }
 
-  .login__title {
-    font-size: 20px;
+  .form-submit {
+    font-size: 15px;
   }
 }
