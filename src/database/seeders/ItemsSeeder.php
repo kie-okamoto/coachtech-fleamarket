@@ -37,14 +37,13 @@ class ItemsSeeder extends Seeder
             'アクセサリー',
             'おもちゃ',
             'ベビー・キッズ',
-            'アウトドア'
         ];
 
         foreach ($categoryNames as $name) {
             Category::firstOrCreate(['name' => $name]);
         }
 
-        $categoryCount = Category::count();
+        $categoryIds = Category::pluck('id')->all(); // カテゴリID一覧取得
 
         // 商品データ（10件）
         $items = [
@@ -120,14 +119,19 @@ class ItemsSeeder extends Seeder
             ],
         ];
 
-        // user_id, category_id, timestamps を追加
-        foreach ($items as &$item) {
-            $item['user_id'] = 1;
-            $item['category_id'] = rand(1, $categoryCount);
-            $item['created_at'] = now();
-            $item['updated_at'] = now();
-        }
+        foreach ($items as $data) {
+            $item = Item::create([
+                'user_id' => 1,
+                'name' => $data['name'],
+                'price' => $data['price'],
+                'description' => $data['description'],
+                'image' => $data['image'],
+                'condition' => $data['condition'],
+            ]);
 
-        Item::insert($items);
+            // 1〜2カテゴリをランダムで紐付け（複数可）
+            $randomCategoryIds = collect($categoryIds)->random(rand(1, 2))->all();
+            $item->categories()->attach($randomCategoryIds);
+        }
     }
 }

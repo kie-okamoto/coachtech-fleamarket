@@ -14,15 +14,21 @@
   @include('components.header')
 
   <main class="main">
+    @php
+    $query = request()->except('page');
+    @endphp
+
     <div class="tabs">
       @auth
-      <a href="{{ route('index', ['page' => 'sell']) }}" class="tab {{ request('page') === 'sell' ? 'active' : '' }}">おすすめ</a>
-      <a href="{{ route('index', ['page' => 'buy']) }}" class="tab {{ request('page') === 'buy' ? 'active' : '' }}">マイリスト</a>
+      <a href="{{ route('index', array_merge(['page' => 'sell'], $query)) }}" class="tab {{ request('page') === 'sell' ? 'active' : '' }}">おすすめ</a>
+      <a href="{{ route('index', array_merge(['page' => 'buy'], $query)) }}" class="tab {{ request('page') === 'buy' ? 'active' : '' }}">マイリスト</a>
       @else
-      <a href="{{ route('index', ['page' => 'new']) }}" class="tab {{ request('page') !== 'mylist' ? 'active' : '' }}">おすすめ</a>
-      <a href="{{ route('index', ['page' => 'mylist']) }}" class="tab {{ request('page') === 'mylist' ? 'active' : '' }}">マイリスト</a>
+      <a href="{{ route('index', array_merge(['page' => 'new'], $query)) }}" class="tab {{ request('page') !== 'mylist' ? 'active' : '' }}">おすすめ</a>
+      <a href="{{ route('index', array_merge(['page' => 'mylist'], $query)) }}" class="tab {{ request('page') === 'mylist' ? 'active' : '' }}">マイリスト</a>
       @endauth
     </div>
+
+
 
     <div class="product-grid">
       @if (Auth::check() || request('page') !== 'mylist')

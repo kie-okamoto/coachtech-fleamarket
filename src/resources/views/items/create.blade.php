@@ -25,9 +25,11 @@
         <div class="image-upload-area">
           <label class="image-upload-button" for="image">画像を選択する</label>
           <input type="file" id="image" name="image" accept="image/*">
-          {{-- プレビュー画像 --}}
           <img id="create-preview-image" src="" alt="プレビュー画像">
         </div>
+        @error('image')
+        <p class="error">{{ $message }}</p>
+        @enderror
       </div>
 
       {{-- カテゴリ --}}
@@ -38,70 +40,77 @@
         <div class="category-tags">
           @foreach($categories as $category)
           <label class="tag">
-            <input type="checkbox" name="categories[]" value="{{ $category->id }}">
+            <input type="checkbox" name="categories[]" value="{{ $category->id }}" {{ is_array(old('categories')) && in_array($category->id, old('categories')) ? 'checked' : '' }}>
             <span>{{ $category->name }}</span>
           </label>
           @endforeach
         </div>
+        @error('categories')
+        <div class="category-error">{{ $message }}</div>
+        @enderror
       </section>
 
-      {{-- 状態 --}}
+      {{-- 商品の状態 --}}
       <section class="form-section">
         <label for="condition">商品の状態</label>
         <select name="condition" id="condition" class="condition-select">
-          <option value="" disabled selected hidden>選択してください</option>
-          <option value="良好">良好</option>
-          <option value="目立った傷や汚れなし">目立った傷や汚れなし</option>
-          <option value="やや傷や汚れあり">やや傷や汚れあり</option>
-          <option value="状態が悪い">状態が悪い</option>
+          <option value="" disabled {{ old('condition') === null ? 'selected' : '' }}>選択してください</option>
+          <option value="良好" {{ old('condition') === '良好' ? 'selected' : '' }}>良好</option>
+          <option value="目立った傷や汚れなし" {{ old('condition') === '目立った傷や汚れなし' ? 'selected' : '' }}>目立った傷や汚れなし</option>
+          <option value="やや傷や汚れあり" {{ old('condition') === 'やや傷や汚れあり' ? 'selected' : '' }}>やや傷や汚れあり</option>
+          <option value="状態が悪い" {{ old('condition') === '状態が悪い' ? 'selected' : '' }}>状態が悪い</option>
         </select>
+        @error('condition')
+        <p class="error">{{ $message }}</p>
+        @enderror
       </section>
 
-      {{-- 商品情報 --}}
+      {{-- 商品名・説明 --}}
       <section class="form-section">
         <h2>商品名と説明</h2>
         <div class="section-divider"></div>
+
         <label for="name">商品名</label>
-        <input type="text" name="name" id="name">
+        <input type="text" name="name" id="name" value="{{ old('name') }}">
+        @error('name')
+        <p class="error">{{ $message }}</p>
+        @enderror
 
         <label for="brand">ブランド名</label>
-        <input type="text" name="brand" id="brand">
+        <input type="text" name="brand" id="brand" value="{{ old('brand') }}">
 
         <label for="description">商品の説明</label>
-        <textarea name="description" id="description" rows="4"></textarea>
+        <textarea name="description" id="description" rows="4">{{ old('description') }}</textarea>
+        @error('description')
+        <p class="error">{{ $message }}</p>
+        @enderror
 
         <label for="price">販売価格</label>
-        <input type="number" name="price" id="price" min="0">
+        <input type="number" name="price" id="price" min="0" value="{{ old('price') }}">
+        @error('price')
+        <p class="error">{{ $message }}</p>
+        @enderror
       </section>
 
       <button type="submit" class="submit-button">出品する</button>
     </form>
   </main>
 
-  {{-- カテゴリー選択反映 + 画像プレビュー --}}
+  {{-- JavaScript --}}
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // カテゴリー選択の見た目
       const categoryInputs = document.querySelectorAll('.category-tags input[type="checkbox"]');
       categoryInputs.forEach(input => {
         input.addEventListener('change', function() {
-          if (this.checked) {
-            this.closest('label').classList.add('tag--selected');
-          } else {
-            this.closest('label').classList.remove('tag--selected');
-          }
+          this.closest('label').classList.toggle('tag--selected', this.checked);
         });
-
-        // 初期表示時にすでにチェックされているものにスタイル付与
         if (input.checked) {
           input.closest('label').classList.add('tag--selected');
         }
       });
 
-      // 画像プレビュー表示
       const imageInput = document.getElementById('image');
       const previewImage = document.getElementById('create-preview-image');
-
       imageInput.addEventListener('change', function() {
         const file = this.files[0];
         if (file && file.type.startsWith('image/')) {
@@ -115,7 +124,6 @@
       });
     });
   </script>
-
 </body>
 
 </html>

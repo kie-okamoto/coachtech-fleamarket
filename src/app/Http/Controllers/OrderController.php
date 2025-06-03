@@ -33,6 +33,13 @@ class OrderController extends Controller
         $item = Item::findOrFail($item_id);
         $user = Auth::user();
 
+        // すでに購入されていたらリダイレクト
+        if ($item->order) {
+            return redirect('/')
+                ->with('error', 'この商品はすでに購入されています。');
+        }
+
+        // 購入処理
         Order::create([
             'user_id' => $user->id,
             'item_id' => $item->id,
@@ -42,6 +49,7 @@ class OrderController extends Controller
         return redirect('/')
             ->with('message', '購入が完了しました！');
     }
+
 
     /**
      * 配送先住所編集画面を表示

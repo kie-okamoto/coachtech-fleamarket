@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Item;
 use App\Models\Category;
+use App\Http\Requests\ExhibitionRequest;
+use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
@@ -13,21 +14,16 @@ class ItemController extends Controller
     {
         $page = $request->query('page');
         $keyword = $request->query('keyword');
-
         $products = collect();
 
         if (Auth::check()) {
             $user = Auth::user();
 
             if ($page === 'sell') {
-                // 自分以外の商品（おすすめ）
-                $query = Item::where('user_id', '!=', $user->id)
-                    ->with(['order', 'categories']);
+                $query = Item::where('user_id', '!=', $user->id)->with(['order', 'categories']);
             } elseif ($page === 'buy') {
-                // 自分がいいねした商品（マイリスト）
                 $query = $user->favorites()->with(['order', 'categories']);
             } else {
-                // デフォルト：全商品
                 $query = Item::with(['order', 'categories']);
             }
 
@@ -37,13 +33,10 @@ class ItemController extends Controller
 
             $products = $query->get();
         } else {
-            // 未ログイン：全商品（mylistは除外）
             $query = Item::with(['order', 'categories']);
-
             if ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
             }
-
             $products = $query->get();
         }
 
@@ -56,26 +49,15 @@ class ItemController extends Controller
         return view('items.show', compact('item'));
     }
 
-
     public function create()
     {
         $categories = Category::all();
         return view('items.create', compact('categories'));
     }
 
-    public function store(Request $request)
+    // 修正：ExhibitionRequest に差し替え
+    public function store(ExhibitionRequest $request)
     {
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'name' => 'required|string|max:255',
-            'brand' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'condition' => 'required|string',
-            'categories' => 'required|array',
-            'categories.*' => 'exists:categories,id',
-        ]);
-
         $imagePath = $request->file('image')->store('image', 'public');
 
         $item = new Item();
