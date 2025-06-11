@@ -38,13 +38,24 @@
         <div class="section-divider"></div>
         <label>カテゴリー</label>
         <div class="category-tags">
-          @foreach($categories as $category)
+          @foreach($categories->slice(0, 12) as $category)
           <label class="tag">
-            <input type="checkbox" name="categories[]" value="{{ $category->id }}" {{ is_array(old('categories')) && in_array($category->id, old('categories')) ? 'checked' : '' }}>
+            <input type="checkbox" name="categories[]" value="{{ $category->id }}" {{ in_array($category->id, old('categories', [])) ? 'checked' : '' }}>
             <span>{{ $category->name }}</span>
           </label>
           @endforeach
         </div>
+
+        <div class="category-tags category-tags--left">
+          @foreach($categories->slice(12) as $category)
+          <label class="tag">
+            <input type="checkbox" name="categories[]" value="{{ $category->id }}" {{ in_array($category->id, old('categories', [])) ? 'checked' : '' }}>
+            <span>{{ $category->name }}</span>
+          </label>
+          @endforeach
+        </div>
+
+
         @error('categories')
         <div class="category-error">{{ $message }}</div>
         @enderror

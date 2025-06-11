@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\ProfileRequest;
 
 
 class UserController extends Controller
@@ -17,13 +18,14 @@ class UserController extends Controller
         $page = $request->query('page');
 
         if ($page === 'buy') {
-            $items = Auth::user()->purchasedItems()->latest()->get();
+            $items = Auth::user()->purchasedItems()->with('order')->latest()->get();
         } else {
-            $items = Auth::user()->items()->latest()->get();
+            $items = Auth::user()->items()->with('order')->latest()->get();
         }
 
         return view('users.profile', compact('items'));
     }
+
 
     /**
      * プロフィール編集画面の表示
@@ -39,42 +41,38 @@ class UserController extends Controller
     /**
      * プロフィール更新処理
      */
-    public function updateProfile(Request $request)
+    public function updateProfile(ProfileRequest $request)
     {
         $user = Auth::user();
 
-        // バリデーション
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'postal_code' => 'nullable|string|max:10',
-            'address' => 'nullable|string|max:255',
-            'building' => 'nullable|string|max:255',
-            'profile_image' => 'nullable|image|max:2048',
-        ]);
+        // ✅ FormRequest によるバリデーション済みデータを取得
+        $validated = $request->validated();
 
-        // ユーザー情報更新（名前は先に代入）
+        // ユーザー名更新
         $user->name = $validated['name'];
 
         // プロフィール画像の処理
         if ($request->hasFile('profile_image')) {
+            // 既存画像があれば削除
             if ($user->profile_image && Storage::disk('public')->exists($user->profile_image)) {
                 Storage::disk('public')->delete($user->profile_image);
             }
 
+            // 新しい画像を保存
             $path = $request->file('profile_image')->store('profile_images', 'public');
             $user->profile_image = $path;
         }
 
-        // ✅ 画像の有無にかかわらず必ずここで保存
+        // ユーザー情報を保存
         $user->save();
 
-        // 住所情報更新
+        // 住所情報を更新または作成
         $user->address()->updateOrCreate(
             ['user_id' => $user->id],
             [
-                'postal_code' => $validated['postal_code'] ?? '',
-                'address'     => $validated['address'] ?? '',
-                'building'    => $validated['building'] ?? '',
+                'postal_code' => $validated['postal_code'],
+                'address'     => $validated['address'],
+                'building'    => $validated['building'],
             ]
         );
 

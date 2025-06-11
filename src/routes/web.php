@@ -54,6 +54,8 @@ Route::post('/purchase/address/{item_id}', [OrderController::class, 'updateAddre
 Route::post('/checkout', [StripeController::class, 'checkout'])->name('stripe.checkout');
 Route::get('/checkout/success', [StripeController::class, 'success'])->name('stripe.success');
 Route::get('/checkout/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
+Route::get('/success', [OrderController::class, 'success'])->name('orders.success');
+
 
 // ▼ 商品出品画面
 Route::get('/sell', [ItemController::class, 'create'])->middleware(['auth', 'verified'])->name('items.create');

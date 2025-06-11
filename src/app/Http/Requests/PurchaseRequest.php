@@ -14,8 +14,8 @@ class PurchaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'payment_method' => ['required', 'in:credit_card,convenience_store'],
-            'delivery_address' => ['required'],
+            'payment_method' => ['required', 'in:card,konbini'], // Stripe連携を想定
+            'address_id'     => ['required', 'exists:addresses,id'], // addressesテーブルとの整合性
         ];
     }
 
@@ -24,7 +24,8 @@ class PurchaseRequest extends FormRequest
         return [
             'payment_method.required' => '支払い方法を選択してください。',
             'payment_method.in' => '有効な支払い方法を選択してください。',
-            'delivery_address.required' => '配送先を選択してください。',
+            'address_id.required' => '配送先を選択してください。',
+            'address_id.exists' => '選択された配送先が存在しません。',
         ];
     }
 }

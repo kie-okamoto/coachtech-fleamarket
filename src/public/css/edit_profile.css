@@ -22,32 +22,30 @@ body {
 .profile__form {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
 }
 
+/* ▼ プロフィール画像とボタンの横並び（左寄せ） */
 .profile__image-wrapper {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+  gap: 30px;
   margin-bottom: 32px;
+  padding-left: 2px;
 }
 
-.profile__image {
-  width: 100px;
-  height: 100px;
+/* ▼ プロフィール画像サイズと共通背景（未設定時も含む） */
+.profile__image,
+.profile__placeholder {
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 12px;
-}
-
-.profile__placeholder {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
   background-color: #ccc;
-  margin-bottom: 12px;
 }
 
+/* ▼ ボタン：画像の右に配置 */
 .profile__upload-button {
   background-color: transparent;
   color: #ff5a5a;
@@ -63,26 +61,37 @@ body {
   display: none;
 }
 
+/* ▼ 入力フォーム（名前・郵便番号など） */
 .profile__group {
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .profile__group label {
   display: block;
   font-weight: bold;
   margin-bottom: 6px;
+  padding-left: 2px;
 }
 
 .profile__group input {
   width: 100%;
-  padding: 10px;
+  padding: 10px 12px;
   border: 1px solid #aaa;
   border-radius: 4px;
   font-size: 16px;
   box-sizing: border-box;
 }
 
+/* ▼ エラーメッセージ表示 */
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 6px;
+  padding-left: 2px;
+}
+
+/* ▼ 送信ボタン */
 .profile__submit {
   background-color: #ff5a5a;
   color: white;
@@ -92,5 +101,5 @@ body {
   font-size: 16px;
   cursor: pointer;
   width: 100%;
-  max-width: 300px;
+  margin: 40px auto 0;
 }

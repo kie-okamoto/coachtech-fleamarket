@@ -6,8 +6,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Order;
-use App\Models\Address;
 use App\Http\Requests\PurchaseRequest;
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
 
 class OrderController extends Controller
 {
@@ -33,21 +34,81 @@ class OrderController extends Controller
         $item = Item::findOrFail($item_id);
         $user = Auth::user();
 
-        // すでに購入されていたらリダイレクト
+        // 購入済みかチェック
         if ($item->order) {
             return redirect('/')
                 ->with('error', 'この商品はすでに購入されています。');
         }
 
-        // 購入処理
-        Order::create([
-            'user_id' => $user->id,
-            'item_id' => $item->id,
-            'payment_method' => $request->payment_method,
+        $validated = $request->validated();
+
+        // ✅ Stripe初期化（正しい設定）
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        // ✅ Checkoutセッション作成
+        $session = Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'jpy',
+                    'unit_amount' => $item->price,
+                    'product_data' => [
+                        'name' => $item->name,
+                    ],
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'customer_email' => $user->email,
+            'success_url' => route('orders.success') . '?item_id=' . $item->id . '&session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('purchase', ['item_id' => $item_id]),
         ]);
 
-        return redirect('/')
-            ->with('message', '購入が完了しました！');
+        // ✅ 決済ページにリダイレクト
+        return redirect($session->url);
+    }
+
+
+    /**
+     * 購入完了ページを表示
+     */
+    public function success(Request $request)
+    {
+        $user = Auth::user();
+
+        $session_id = $request->query('session_id');
+        $item_id = $request->query('item_id');
+
+        if (!$session_id || !$item_id) {
+            return redirect('/')->with('error', '決済情報が不足しています。');
+        }
+
+        // ✅ Stripe初期化（ここが必須！）
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        // ✅ Stripeからセッション情報を取得
+        $session = Session::retrieve($session_id);
+
+        $item = Item::findOrFail($item_id);
+
+        if ($item->order) {
+            return redirect('/')->with('error', 'すでに購入されています。');
+        }
+
+        $address = $user->address;
+        if (!$address) {
+            return redirect('/')->with('error', '配送先住所が登録されていません。');
+        }
+
+        // 注文保存
+        Order::create([
+            'user_id'        => $user->id,
+            'item_id'        => $item->id,
+            'address_id'     => $address->id,
+            'payment_method' => 'card',
+        ]);
+
+        return view('orders.success');
     }
 
 
@@ -66,14 +127,8 @@ class OrderController extends Controller
     /**
      * 配送先住所の更新処理
      */
-    public function updateAddress(Request $request, $item_id)
+    public function updateAddress(AddressRequest $request, $item_id)
     {
-        $request->validate([
-            'postal_code' => 'required|string|max:8',
-            'address'     => 'required|string|max:255',
-            'building'    => 'nullable|string|max:255',
-        ]);
-
         $user = Auth::user();
 
         $user->address()->updateOrCreate(

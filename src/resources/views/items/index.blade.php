@@ -18,17 +18,19 @@
     $query = request()->except('page');
     @endphp
 
-    <div class="tabs">
-      @auth
-      <a href="{{ route('index', array_merge(['page' => 'sell'], $query)) }}" class="tab {{ request('page') === 'sell' ? 'active' : '' }}">おすすめ</a>
-      <a href="{{ route('index', array_merge(['page' => 'buy'], $query)) }}" class="tab {{ request('page') === 'buy' ? 'active' : '' }}">マイリスト</a>
-      @else
-      <a href="{{ route('index', array_merge(['page' => 'new'], $query)) }}" class="tab {{ request('page') !== 'mylist' ? 'active' : '' }}">おすすめ</a>
-      <a href="{{ route('index', array_merge(['page' => 'mylist'], $query)) }}" class="tab {{ request('page') === 'mylist' ? 'active' : '' }}">マイリスト</a>
-      @endauth
+    <div class="tabs-wrapper">
+      <div class="tabs-container">
+        <div class="tabs">
+          @auth
+          <a href="{{ route('index', array_merge(['page' => 'sell'], $query)) }}" class="tab {{ request('page') === 'sell' ? 'active' : '' }}">おすすめ</a>
+          <a href="{{ route('index', array_merge(['page' => 'buy'], $query)) }}" class="tab {{ request('page') === 'buy' ? 'active' : '' }}">マイリスト</a>
+          @else
+          <a href="{{ route('index', array_merge(['page' => 'new'], $query)) }}" class="tab {{ request('page') !== 'mylist' ? 'active' : '' }}">おすすめ</a>
+          <a href="{{ route('index', array_merge(['page' => 'mylist'], $query)) }}" class="tab {{ request('page') === 'mylist' ? 'active' : '' }}">マイリスト</a>
+          @endauth
+        </div>
+      </div>
     </div>
-
-
 
     <div class="product-grid">
       @if (Auth::check() || request('page') !== 'mylist')
@@ -47,8 +49,9 @@
       @empty
       <p>表示できる商品がありません。</p>
       @endforelse
-      @else
-      <p>マイリストを見るにはログインが必要です。</p>
+      @auth
+      {{-- マイリストの表示（必要な場合ここに入れる） --}}
+      @endauth
       @endif
     </div>
   </main>

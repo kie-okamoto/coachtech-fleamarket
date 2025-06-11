@@ -26,32 +26,48 @@
         @else
         <div class="profile__placeholder"></div>
         @endif
+
         <label for="profile_image" class="profile__upload-button">画像を選択する</label>
         <input type="file" name="profile_image" id="profile_image" class="profile__file-input">
+        @error('profile_image')
+        <div class="error">{{ $message }}</div>
+        @enderror
       </div>
 
       {{-- ユーザー名 --}}
       <div class="profile__group">
         <label for="name">ユーザー名</label>
         <input type="text" name="name" id="name" value="{{ old('name', Auth::user()->name) }}">
+        @error('name')
+        <div class="error">{{ $message }}</div>
+        @enderror
       </div>
 
       {{-- 郵便番号 --}}
       <div class="profile__group">
         <label for="postal_code">郵便番号</label>
         <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code', $address->postal_code ?? '') }}">
+        @error('postal_code')
+        <div class="error">{{ $message }}</div>
+        @enderror
       </div>
 
       {{-- 住所 --}}
       <div class="profile__group">
         <label for="address">住所</label>
         <input type="text" name="address" id="address" value="{{ old('address', $address->address ?? '') }}">
+        @error('address')
+        <div class="error">{{ $message }}</div>
+        @enderror
       </div>
 
       {{-- 建物名 --}}
       <div class="profile__group">
         <label for="building">建物名</label>
         <input type="text" name="building" id="building" value="{{ old('building', $address->building ?? '') }}">
+        @error('building')
+        <div class="error">{{ $message }}</div>
+        @enderror
       </div>
 
       <button type="submit" class="profile__submit">更新する</button>

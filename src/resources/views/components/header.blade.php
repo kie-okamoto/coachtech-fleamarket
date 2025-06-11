@@ -5,11 +5,13 @@
                 <img src="{{ asset('images/logo.svg') }}" alt="COACHTECHロゴ">
             </a>
         </div>
+
         <div class="header__center">
             <form action="/" method="GET">
                 <input type="text" class="header__search" name="keyword" placeholder="なにをお探しですか？" value="{{ request('keyword') }}">
             </form>
         </div>
+
         <div class="header__right header__nav">
             @auth
             <form method="POST" action="{{ route('logout') }}">

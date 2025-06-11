@@ -56,16 +56,28 @@
   color: white;
 }
 
-/* ==== カテゴリータグ ==== */
+/* ==== カテゴリータグ（1〜2行目：均等配置） ==== */
 .create .category-tags {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  /* 両端均等配置 */
   max-width: 680px;
   margin: 0 auto;
   gap: 12px 12px;
 }
 
+/* ==== カテゴリータグ（3行目：左寄せ） ==== */
+.create .category-tags--left {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  max-width: 680px;
+  margin: 12px auto 0;
+  gap: 12px 12px;
+}
+
+/* ==== タグデザイン ==== */
 .create .tag {
   display: flex;
   align-items: center;
@@ -79,6 +91,7 @@
   box-sizing: border-box;
   white-space: nowrap;
   line-height: 1;
+  cursor: pointer;
 }
 
 .create .tag input {

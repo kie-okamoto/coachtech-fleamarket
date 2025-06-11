@@ -1,10 +1,11 @@
 <?php
 
-// app/Http/Controllers/StripeController.php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Item;
+use App\Models\Order;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 
@@ -12,13 +13,13 @@ class StripeController extends Controller
 {
     public function checkout(Request $request)
     {
-        // StripeのAPIキーを設定
         Stripe::setApiKey(config('services.stripe.secret'));
 
-        // 商品の情報を取得（例：item_idをリクエストから受け取る）
-        $item = \App\Models\Item::findOrFail($request->item_id);
+        $item = Item::findOrFail($request->item_id);
 
-        // Checkout セッションを作成
+        // 購入対象の商品をセッションに一時保存（成功時に識別）
+        session(['purchased_item_id' => $item->id]);
+
         $session = Session::create([
             'payment_method_types' => ['card', 'konbini'],
             'line_items' => [[
@@ -27,7 +28,7 @@ class StripeController extends Controller
                     'product_data' => [
                         'name' => $item->name,
                     ],
-                    'unit_amount' => $item->price * 100,
+                    'unit_amount' => (int)$item->price,
                 ],
                 'quantity' => 1,
             ]],
@@ -41,11 +42,29 @@ class StripeController extends Controller
 
     public function success()
     {
-        return view('stripe.success');
+        $itemId = session('purchased_item_id');
+
+        if ($itemId && Auth::check()) {
+            $item = Item::find($itemId);
+
+            if ($item && !$item->order) {
+                Order::create([
+                    'user_id' => Auth::id(),
+                    'item_id' => $item->id,
+                    'payment_method' => 'stripe',
+                ]);
+            }
+
+            session()->forget('purchased_item_id');
+        }
+
+        // ✅ 正しいリダイレクト先
+        return redirect()->route('orders.success'); // ← OK！
     }
+
 
     public function cancel()
     {
-        return view('stripe.cancel');
+        return redirect('/')->with('error', '決済がキャンセルされました。');
     }
 }

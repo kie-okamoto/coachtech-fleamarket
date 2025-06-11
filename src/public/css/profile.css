@@ -1,3 +1,4 @@
+/* ==== RESET ==== */
 body {
   font-family: sans-serif;
   margin: 0;
@@ -12,17 +13,19 @@ body {
   padding: 0 20px;
 }
 
+/* プロフィールユーザー情報 */
 .profile__user {
   display: flex;
   align-items: center;
   gap: 30px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   flex-wrap: wrap;
+  margin-left: 100px;
 }
 
 .profile__icon {
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 130px;
   background-color: #ccc;
   border-radius: 50%;
   object-fit: cover;
@@ -31,65 +34,81 @@ body {
 .profile__name {
   font-size: 28px;
   font-weight: bold;
+  flex: 1;
+  align-self: center;
 }
 
 .profile__edit-button {
-  margin-left: auto;
-  padding: 8px 16px;
-  font-size: 16px;
+  padding: 10px 25px;
+  font-size: 18px;
   color: red;
-  border: 1px solid red;
+  border: 2px solid red;
   border-radius: 6px;
   text-decoration: none;
+  white-space: nowrap;
 }
 
-/* ==== TABS ==== */
-.tabs {
+/* ==== PROFILE TABS（mypage専用） ==== */
+.tabs-wrapper {
+  width: 100%;
+  border-bottom: 2px solid gray;
+  padding-bottom: 8px;
+  margin: 40px 0 20px;
+  box-sizing: border-box;
+}
+
+.tabs-container {
   display: flex;
+  justify-content: flex-start;
+  max-width: 1375px;
+  margin: 0 auto;
+  padding-left: 100px;
+}
+
+.tabs {
+  display: inline-flex;
   gap: 30px;
-  font-size: 18px;
-  font-weight: bold;
-  margin-top: 20px;
 }
 
 .tab {
+  min-width: 120px;
+  padding: 10px;
+  font-weight: bold;
   color: #666;
   text-decoration: none;
+  font-size: 20px;
+  text-align: center;
+  display: inline-block;
 }
 
 .tab.active {
   color: red;
-  border-bottom: 2px solid red;
-}
-
-.divider {
-  margin-top: 10px;
-  border: none;
-  height: 2px;
-  background-color: gray;
 }
 
 /* ==== PRODUCT GRID ==== */
 .product-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  margin-top: 40px;
-  justify-content: flex-start;
+  max-width: 1375px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  justify-content: center;
+  gap: 60px;
+  padding: 40px 20px;
+  box-sizing: border-box;
 }
 
 .product-card {
-  flex: 0 1 calc(25% - 18px);
+  width: 260px;
+  max-width: 100%;
+  text-align: left;
   box-sizing: border-box;
-  text-align: center;
 }
 
-/* 商品画像 */
+/* 画像ラッパー */
 .product-image {
+  position: relative;
   width: 100%;
-  height: 281px;
-  background-color: #eee;
-  border-radius: 4px;
+  height: 290px;
   overflow: hidden;
 }
 
@@ -97,12 +116,35 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  border-radius: 4px;
 }
 
 /* 商品名 */
 .product-name {
-  font-size: 16px;
   margin-top: 8px;
-  text-align: center;
+  font-size: 14px;
+  text-align: left;
+  font-size: 20px;
+}
+
+/* SOLDバッジ */
+.sold-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background-color: rgba(255, 0, 0, 0.85);
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 4px;
+  z-index: 10;
+}
+
+/* ==== タブレット対応（768〜850px） ==== */
+@media screen and (min-width: 768px) and (max-width: 850px) {
+  .product-card {
+    width: calc(50% - 40px);
+    /* 2列表示 */
+  }
 }

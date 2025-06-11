@@ -13,11 +13,11 @@
 <body>
   @include('components.header')
 
-  <main class="profile">
+  {{-- ユーザー情報セクション（幅1200px） --}}
+  <div class="profile">
     <div class="profile__user">
       @if (Auth::user()->profile_image)
-      <img
-        src="{{ asset('storage/' . Auth::user()->profile_image) . '?v=' . time() }}"
+      <img src="{{ asset('storage/' . Auth::user()->profile_image) . '?v=' . time() }}"
         alt="プロフィール画像"
         class="profile__icon">
       @else
@@ -25,37 +25,52 @@
       @endif
 
       <div class="profile__name">{{ Auth::user()->name }}</div>
-      <a href="{{ route('profile.edit') }}" class="profile__edit-button">プロフィールを編集</a>
+
+      <a href="{{ route('profile.edit') }}" class="profile__edit-button">
+        プロフィールを編集
+      </a>
     </div>
+  </div>
 
-    {{-- タブ切り替えリンク --}}
-    <div class="tabs">
-      <a href="{{ route('mypage', ['page' => 'sell']) }}" class="tab {{ request('page') !== 'buy' ? 'active' : '' }}">出品した商品</a>
-      <a href="{{ route('mypage', ['page' => 'buy']) }}" class="tab {{ request('page') === 'buy' ? 'active' : '' }}">購入した商品</a>
-    </div>
-
-    <hr class="divider">
-
-    <div class="product-grid">
-      @forelse ($items as $item)
-      <div class="product-card">
-        <div class="product-image">
-          <a href="{{ route('items.show', $item->id) }}">
-            <img
-              src="{{ asset('storage/' . $item->image) }}"
-              alt="{{ $item->name }}"
-              onerror="this.src='{{ asset('images/no-image.png') }}'">
-          </a>
-        </div>
-        <p class="product-name">{{ $item->name }}</p>
+  {{-- タブ（全幅表示） --}}
+  <div class="tabs-wrapper">
+    <div class="tabs-container">
+      <div class="tabs">
+        <a href="{{ route('mypage', ['page' => 'sell']) }}" class="tab {{ request('page') !== 'buy' ? 'active' : '' }}">
+          出品した商品
+        </a>
+        <a href="{{ route('mypage', ['page' => 'buy']) }}" class="tab {{ request('page') === 'buy' ? 'active' : '' }}">
+          購入した商品
+        </a>
       </div>
-      @empty
-      <div class="no-items-message">
-        <p>商品がありません。</p>
-      </div>
-      @endforelse
     </div>
-  </main>
+  </div>
+
+  {{-- 商品グリッド（全幅） --}}
+  <div class="product-grid">
+    @forelse ($items as $item)
+    <div class="product-card">
+      <div class="product-image">
+        <a href="{{ route('items.show', $item->id) }}">
+          <img src="{{ asset('storage/' . $item->image) }}"
+            alt="{{ $item->name }}"
+            onerror="this.src='{{ asset('images/no-image.png') }}'">
+        </a>
+
+        @if($item->is_sold ?? false)
+        <div class="sold-overlay">SOLD</div>
+        @endif
+      </div>
+
+      <p class="product-name">{{ $item->name }}</p>
+    </div>
+    @empty
+    <div class="no-items-message">
+      <p>商品がありません。</p>
+    </div>
+    @endforelse
+  </div>
+
 </body>
 
 </html>

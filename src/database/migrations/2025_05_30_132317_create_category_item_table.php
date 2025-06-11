@@ -14,13 +14,11 @@ class CreateCategoryItemTable extends Migration
     public function up()
     {
         Schema::create('category_item', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('item_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
-            // 重複登録を防ぐためのユニーク制約（任意）
-            $table->unique(['item_id', 'category_id']);
+            $table->primary(['item_id', 'category_id']); // ← こちらが複合主キー
         });
     }
 

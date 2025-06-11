@@ -14,9 +14,10 @@
   @include('components.header')
 
   <main class="purchase">
-    <form action="{{ route('stripe.checkout') }}" method="POST" class="purchase__form">
+    <form action="{{ route('purchase.confirm', ['item_id' => $item->id]) }}" method="POST" class="purchase__form">
       @csrf
-      <input type="hidden" name="item_id" value="{{ $item->id }}">
+      {{-- ▼ 配送先ID --}}
+      <input type="hidden" name="address_id" value="{{ $address->id ?? '' }}">
 
       <div class="purchase__content">
         {{-- 左：商品情報・入力 --}}
@@ -36,8 +37,8 @@
             <label for="payment_method">支払い方法</label>
             <select name="payment_method" id="payment_method" class="payment-select">
               <option value="">選択してください</option>
-              <option value="convenience_store" {{ old('payment_method') == 'convenience_store' ? 'selected' : '' }}>コンビニ払い</option>
-              <option value="credit_card" {{ old('payment_method') == 'credit_card' ? 'selected' : '' }}>カード払い</option>
+              <option value="card" {{ old('payment_method') == 'card' ? 'selected' : '' }}>カード払い</option>
+              <option value="konbini" {{ old('payment_method') == 'konbini' ? 'selected' : '' }}>コンビニ払い</option>
             </select>
             @error('payment_method')
             <div class="error">{{ $message }}</div>
@@ -52,14 +53,18 @@
             </p>
 
             @if ($address)
-            <p>〒{{ $address->postal_code ?? '未設定' }}</p>
-            <p>{{ $address->address ?? '未設定' }}</p>
+            <p>〒{{ $address->postal_code }}</p>
+            <p>{{ $address->address }}</p>
             @if (!empty($address->building))
             <p>{{ $address->building }}</p>
             @endif
             @else
             <p class="error">配送先住所が登録されていません。</p>
             @endif
+
+            @error('address_id')
+            <div class="error">{{ $message }}</div>
+            @enderror
           </div>
         </div>
 
@@ -83,20 +88,15 @@
     </form>
   </main>
 
-  {{-- ▼ 支払い方法のリアルタイム反映 --}}
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const select = document.getElementById('payment_method');
       const display = document.getElementById('selected-payment-method');
       const map = {
-        'convenience_store': 'コンビニ払い',
-        'credit_card': 'カード払い'
+        'card': 'カード払い',
+        'konbini': 'コンビニ払い'
       };
-
-      // 初期表示対応
-      const initial = select.value;
-      display.textContent = map[initial] || '未選択';
-
+      display.textContent = map[select.value] || '未選択';
       select.addEventListener('change', function() {
         display.textContent = map[this.value] || '未選択';
       });

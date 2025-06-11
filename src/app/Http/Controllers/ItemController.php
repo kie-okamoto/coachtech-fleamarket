@@ -20,11 +20,16 @@ class ItemController extends Controller
             $user = Auth::user();
 
             if ($page === 'sell') {
-                $query = Item::where('user_id', '!=', $user->id)->with(['order', 'categories']);
+                // 自分以外の商品（おすすめ）
+                $query = Item::where('user_id', '!=', $user->id)
+                    ->with(['order', 'categories']);
             } elseif ($page === 'buy') {
+                // お気に入り商品
                 $query = $user->favorites()->with(['order', 'categories']);
             } else {
-                $query = Item::with(['order', 'categories']);
+                // ログイン中の通常一覧 → 自分の商品は表示しない
+                $query = Item::where('user_id', '!=', $user->id)
+                    ->with(['order', 'categories']);
             }
 
             if ($keyword) {
@@ -33,6 +38,7 @@ class ItemController extends Controller
 
             $products = $query->get();
         } else {
+            // 未ログインの場合 → 全商品
             $query = Item::with(['order', 'categories']);
             if ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
@@ -45,7 +51,14 @@ class ItemController extends Controller
 
     public function show($item_id)
     {
-        $item = Item::with(['categories', 'comments.user', 'favoritedUsers'])->findOrFail($item_id);
+        // 商品詳細ページで「SOLDバッジ」を表示させるために order を読み込む
+        $item = Item::with([
+            'order',               // ← 追加：購入済みかを判断するために必要
+            'categories',
+            'comments.user',
+            'favoritedUsers'
+        ])->findOrFail($item_id);
+
         return view('items.show', compact('item'));
     }
 
@@ -54,6 +67,7 @@ class ItemController extends Controller
         $categories = Category::all();
         return view('items.create', compact('categories'));
     }
+
 
     // 修正：ExhibitionRequest に差し替え
     public function store(ExhibitionRequest $request)

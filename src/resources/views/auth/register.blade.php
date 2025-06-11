@@ -13,10 +13,13 @@
   <header class="header">
     <div class="header__inner">
       <div class="header__logo">
-        <img src="{{ asset('images/logo.svg') }}" alt="COACHTECHロゴ">
+        <a href="{{ url('/') }}">
+          <img src="{{ asset('images/logo.svg') }}" alt="COACHTECHロゴ">
+        </a>
       </div>
     </div>
   </header>
+
 
   <main class="main">
     <h2 class="form-title">会員登録</h2>
