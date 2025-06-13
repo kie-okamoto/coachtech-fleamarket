@@ -10,7 +10,7 @@ class UsersSeeder extends Seeder
 {
     public function run()
     {
-        // id=1 の admin を登録 or 更新（上書き安全）
+        // id=1 の admin を登録 or 更新
         User::updateOrCreate(
             ['id' => 1],
             [
@@ -21,7 +21,6 @@ class UsersSeeder extends Seeder
             ]
         );
 
-        // id=2以降の一般ユーザーを4件作成（合計5件）
         User::factory()->count(4)->create();
     }
 }

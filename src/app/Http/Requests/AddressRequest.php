@@ -15,7 +15,7 @@ class AddressRequest extends FormRequest
     {
         return [
             //'name' => ['required', 'string'],
-            'postal_code' => ['required', 'regex:/^\d{3}-\d{4}$/'], // ← ハイフンあり8桁形式のみ
+            'postal_code' => ['required', 'regex:/^\d{3}-\d{4}$/'],
             'address'     => ['required', 'string'],
             'building'    => ['required', 'string'],
         ];

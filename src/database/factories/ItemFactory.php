@@ -8,7 +8,6 @@ class ItemFactory extends Factory
 {
     public function definition(): array
     {
-        // 事前に定義済みの商品情報をまとめた配列（名前・画像・説明・状態）
         $items = [
             [
                 'name' => '腕時計',
@@ -81,7 +80,6 @@ class ItemFactory extends Factory
             'condition' => $item['condition'],
             'price' => $this->faker->randomElement([500, 1200, 2500, 4000, 8000, 15000, 30000, 45000]),
             'user_id' => 1,
-            'category_id' => $this->faker->numberBetween(1, 15),
             'created_at' => now(),
             'updated_at' => now(),
         ];

@@ -43,13 +43,11 @@ class Item extends Model
         return $this->belongsToMany(User::class, 'favorites', 'item_id', 'user_id')->withTimestamps();
     }
 
-    // ✅ 購入者（1対1リレーション・リレーション名を修正）
     public function order()
     {
         return $this->hasOne(Order::class);
     }
 
-    // ✅ 購入済みフラグ（order()と統一）
     public function getIsSoldAttribute()
     {
         return $this->order !== null;

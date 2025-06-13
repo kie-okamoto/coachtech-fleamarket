@@ -23,9 +23,9 @@ class AuthController extends Controller
     /**
      * ログイン処理
      */
-    public function login(LoginRequest $request) // ← LoginRequest に変更
+    public function login(LoginRequest $request)
     {
-        $credentials = $request->validated(); // バリデーション済みデータ取得
+        $credentials = $request->validated();
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
@@ -59,15 +59,13 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        event(new Registered($user)); // Fortifyのメール認証イベント発火
+        event(new Registered($user));
         Auth::login($user);
 
-        return redirect('/email/verify'); // 認証待ち画面へ
+        return redirect('/email/verify');
     }
 
-    /**
-     * ログアウト処理
-     */
+     // ログアウト処理
     public function logout(Request $request)
     {
         Auth::logout();

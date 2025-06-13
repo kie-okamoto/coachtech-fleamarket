@@ -17,7 +17,7 @@ class AddressesSeeder extends Seeder
                 ['user_id' => $user->id],
                 [
                     'postal_code' => $faker->postcode(),
-                    'address' => $faker->address(), // prefecture + city + street 等をまとめる場合
+                    'address' => $faker->address(),
                     'building' => $faker->secondaryAddress(),
                     'created_at' => now(),
                     'updated_at' => now(),

@@ -45,7 +45,6 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        // ✅ FormRequest によるバリデーション済みデータを取得
         $validated = $request->validated();
 
         // ユーザー名更新
@@ -53,7 +52,6 @@ class UserController extends Controller
 
         // プロフィール画像の処理
         if ($request->hasFile('profile_image')) {
-            // 既存画像があれば削除
             if ($user->profile_image && Storage::disk('public')->exists($user->profile_image)) {
                 Storage::disk('public')->delete($user->profile_image);
             }

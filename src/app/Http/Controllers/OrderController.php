@@ -42,10 +42,8 @@ class OrderController extends Controller
 
         $validated = $request->validated();
 
-        // ✅ Stripe初期化（正しい設定）
         Stripe::setApiKey(config('services.stripe.secret'));
 
-        // ✅ Checkoutセッション作成
         $session = Session::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
@@ -64,7 +62,6 @@ class OrderController extends Controller
             'cancel_url' => route('purchase', ['item_id' => $item_id]),
         ]);
 
-        // ✅ 決済ページにリダイレクト
         return redirect($session->url);
     }
 
@@ -83,10 +80,8 @@ class OrderController extends Controller
             return redirect('/')->with('error', '決済情報が不足しています。');
         }
 
-        // ✅ Stripe初期化（ここが必須！）
         Stripe::setApiKey(config('services.stripe.secret'));
 
-        // ✅ Stripeからセッション情報を取得
         $session = Session::retrieve($session_id);
 
         $item = Item::findOrFail($item_id);

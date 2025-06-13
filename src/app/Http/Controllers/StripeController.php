@@ -17,7 +17,7 @@ class StripeController extends Controller
 
         $item = Item::findOrFail($request->item_id);
 
-        // 購入対象の商品をセッションに一時保存（成功時に識別）
+        // 購入対象の商品をセッションに一時保存
         session(['purchased_item_id' => $item->id]);
 
         $session = Session::create([
@@ -58,8 +58,8 @@ class StripeController extends Controller
             session()->forget('purchased_item_id');
         }
 
-        // ✅ 正しいリダイレクト先
-        return redirect()->route('orders.success'); // ← OK！
+        // 購入成功後のリダイレクト
+        return redirect()->route('orders.success');
     }
 
 

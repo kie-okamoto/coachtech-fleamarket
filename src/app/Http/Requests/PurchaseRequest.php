@@ -14,8 +14,8 @@ class PurchaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'payment_method' => ['required', 'in:card,konbini'], // Stripe連携を想定
-            'address_id'     => ['required', 'exists:addresses,id'], // addressesテーブルとの整合性
+            'payment_method' => ['required', 'in:card,konbini'],
+            'address_id'     => ['required', 'exists:addresses,id'],
         ];
     }
 

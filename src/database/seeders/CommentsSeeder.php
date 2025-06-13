@@ -11,14 +11,14 @@ class CommentsSeeder extends Seeder
 {
     public function run(): void
     {
-        $faker = \Faker\Factory::create(); // Fakerを使って
-        $users = \App\Models\User::pluck('id')->toArray(); // ユーザーID一覧
-        $items = \App\Models\Item::pluck('id')->toArray(); // 商品ID一覧
+        $faker = \Faker\Factory::create();
+        $users = \App\Models\User::pluck('id')->toArray();
+        $items = \App\Models\Item::pluck('id')->toArray();
 
         foreach ($items as $itemId) {
             \App\Models\Comment::factory()->create([
-                'user_id' => $faker->randomElement($users), // ランダムなユーザーID
-                'item_id' => $itemId,                        // 商品ID
+                'user_id' => $faker->randomElement($users),
+                'item_id' => $itemId,
             ]);
         }
     }

@@ -11,7 +11,6 @@ class ItemsSeeder extends Seeder
 {
     public function run(): void
     {
-        // user_id=1（admin）を作成（未存在時）
         if (!User::where('id', 1)->exists()) {
             User::factory()->create([
                 'id' => 1,
@@ -21,7 +20,7 @@ class ItemsSeeder extends Seeder
             ]);
         }
 
-        // カテゴリが15件なければ追加
+        // カテゴリ
         $categoryNames = [
             'ファッション',
             '家電',
@@ -43,7 +42,7 @@ class ItemsSeeder extends Seeder
             Category::firstOrCreate(['name' => $name]);
         }
 
-        $categoryIds = Category::pluck('id')->all(); // カテゴリID一覧取得
+        $categoryIds = Category::pluck('id')->all();
 
         // 商品データ（10件）
         $items = [

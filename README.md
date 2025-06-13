@@ -1,6 +1,6 @@
 # coachtech-fleamarket
 
-COACHTECH の フリマアプリケーションです。  
+COACHTECH の フリマアプリケーションです。
 会員登録、商品出品・購入、コメント・お気に入りなどの機能を備えています。
 
 ---
@@ -28,8 +28,8 @@ DB_DATABASE=laravel_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 
-STRIPE_KEY=（公開キー）
-STRIPE_SECRET=（シークレットキー）
+STRIPE_KEY=(公開key)
+STRIPE_SECRET=(秘密key)
 MAIL_MAILER=smtp
 MAIL_HOST=mailhog
 MAIL_PORT=1025
@@ -53,6 +53,8 @@ MAIL_FROM_NAME="Fleamarket"
 - Mailhog（開発用メール送信確認）
 
 ## ER 図
+
+![ER図](./er.png)
 
 ## URL
 
