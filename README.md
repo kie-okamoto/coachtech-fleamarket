@@ -28,8 +28,10 @@ DB_DATABASE=laravel_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 
-STRIPE_KEY=(公開key)
-STRIPE_SECRET=(秘密key)
+# Stripeのキーは.envに設定（Gitには含めない）
+STRIPE_KEY=your_stripe_public_key_here
+STRIPE_SECRET=your_stripe_secret_key_here
+
 MAIL_MAILER=smtp
 MAIL_HOST=mailhog
 MAIL_PORT=1025
