@@ -21,17 +21,21 @@
 
       {{-- プロフィール画像 --}}
       <div class="profile__image-wrapper">
-        @if (Auth::user()->profile_image)
-        <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" class="profile__image" alt="プロフィール画像">
-        @else
-        <div class="profile__placeholder"></div>
-        @endif
+        <div class="profile__image-column">
+          @if (Auth::user()->profile_image)
+          <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" class="profile__image" alt="プロフィール画像">
+          @else
+          <div class="profile__placeholder"></div>
+          @endif
+        </div>
 
-        <label for="profile_image" class="profile__upload-button">画像を選択する</label>
-        <input type="file" name="profile_image" id="profile_image" class="profile__file-input">
-        @error('profile_image')
-        <div class="error">{{ $message }}</div>
-        @enderror
+        <div class="profile__upload-column">
+          <label for="profile_image" class="profile__upload-button">画像を選択する</label>
+          <input type="file" name="profile_image" id="profile_image" class="profile__file-input">
+          @error('profile_image')
+          <div class="error">{{ $message }}</div>
+          @enderror
+        </div>
       </div>
 
       {{-- ユーザー名 --}}
@@ -80,23 +84,37 @@
       const file = e.target.files[0];
       if (!file) return;
 
+      // ✅ ファイル形式チェック：JPEGまたはPNG以外は何も表示しない
+      const isJpegOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+      if (!isJpegOrPng) {
+        return; // Laravelのバリデーションに任せる
+      }
+
       const reader = new FileReader();
       reader.onload = function(event) {
-        const img = document.querySelector('.profile__image');
+        const wrapper = document.querySelector('.profile__image-wrapper');
+        let img = document.querySelector('.profile__image');
+
+        // プレビュー画像を挿入
         if (img) {
           img.src = event.target.result;
         } else {
-          const newImg = document.createElement('img');
-          newImg.classList.add('profile__image');
-          newImg.src = event.target.result;
-          document.querySelector('.profile__image-wrapper').prepend(newImg);
-          const placeholder = document.querySelector('.profile__placeholder');
-          if (placeholder) placeholder.style.display = 'none';
+          img = document.createElement('img');
+          img.classList.add('profile__image');
+          img.src = event.target.result;
+          wrapper.prepend(img);
+
+          // プレースホルダー削除
+          const placeholder = wrapper.querySelector('.profile__placeholder');
+          if (placeholder) placeholder.remove();
         }
       };
+
       reader.readAsDataURL(file);
     });
   </script>
+
+
 </body>
 
 </html>

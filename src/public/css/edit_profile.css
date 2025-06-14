@@ -45,6 +45,12 @@ body {
   background-color: #ccc;
 }
 
+/* ▼ アップロード列のエラーとボタンの間隔調整 */
+.profile__upload-column .error {
+  margin-top: 8px;
+  white-space: nowrap;
+}
+
 /* ▼ ボタン：画像の右に配置 */
 .profile__upload-button {
   background-color: transparent;

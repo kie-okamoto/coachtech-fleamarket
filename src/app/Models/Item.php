@@ -50,7 +50,7 @@ class Item extends Model
 
     public function getIsSoldAttribute()
     {
-        return $this->order !== null;
+        return $this->order()->exists();
     }
 
     public function isSold()

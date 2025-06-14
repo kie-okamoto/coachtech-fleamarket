@@ -54,16 +54,17 @@
         <span class="comment-count">{{ $item->comments->count() }}</span>
       </div>
 
-      {{-- 購入ボタン --}}
-      @auth
+      {{-- 購入ボタン（共通でSOLD判定） --}}
       @if ($item->is_sold)
       <button class="purchase-button disabled" disabled>sold out</button>
       @else
+      @auth
       <a href="{{ route('purchase', $item->id) }}" class="purchase-button">購入手続きへ</a>
-      @endif
       @else
       <a href="{{ route('login') }}" class="purchase-button">購入手続きへ</a>
       @endauth
+      @endif
+
 
       <h2>商品説明</h2>
       @if (!empty($item->color))

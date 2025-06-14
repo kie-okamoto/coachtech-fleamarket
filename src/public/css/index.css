@@ -46,8 +46,8 @@ body {
   max-width: 1375px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  justify-content: center;
+  grid-template-columns: repeat(4, 260px);
+  justify-content: start;
   gap: 60px;
   padding: 40px 20px;
   box-sizing: border-box;

@@ -97,10 +97,16 @@
         @enderror
 
         <label for="price">販売価格</label>
-        <input type="number" name="price" id="price" min="0" value="{{ old('price') }}">
+        <input
+          type="text"
+          name="price"
+          id="price"
+          value="{{ old('price') }}"
+          class="{{ $errors->has('price') ? 'input-error' : '' }}">
         @error('price')
         <p class="error">{{ $message }}</p>
         @enderror
+
       </section>
 
       <button type="submit" class="submit-button">出品する</button>
