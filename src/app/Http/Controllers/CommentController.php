@@ -10,6 +10,10 @@ class CommentController extends Controller
 {
     public function store(CommentRequest $request, $item_id)
     {
+        if (!Auth::check()) {
+            return redirect('/login'); // Fortifyで保護されたログイン画面へ
+        }
+
         Comment::create([
             'item_id' => $item_id,
             'user_id' => Auth::id(),

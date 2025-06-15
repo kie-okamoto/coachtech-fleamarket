@@ -143,8 +143,16 @@ body {
 
 /* ==== タブレット対応（768〜850px） ==== */
 @media screen and (min-width: 768px) and (max-width: 850px) {
-  .product-card {
-    width: calc(50% - 40px);
-    /* 2列表示 */
+  .profile__user {
+    margin-left: 20px;
+  }
+
+  .profile__name {
+    font-size: 24px;
+  }
+
+  .profile__edit-button {
+    font-size: 16px;
+    padding: 8px 20px;
   }
 }

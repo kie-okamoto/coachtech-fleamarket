@@ -20,14 +20,14 @@ class ItemController extends Controller
             $user = Auth::user();
 
             if ($page === 'sell') {
-                // 自分以外の商品（おすすめ）
                 $query = Item::where('user_id', '!=', $user->id)
                     ->with(['order', 'categories']);
             } elseif ($page === 'buy') {
-                // お気に入り商品
-                $query = $user->favorites()->with(['order', 'categories']);
+                // ★ここが正しく関数の中にあればOK
+                $query = Item::whereIn('id', $user->favorites()->pluck('item_id'))
+                    ->where('user_id', '!=', $user->id)
+                    ->with(['order', 'categories']);
             } else {
-                // ログイン中の通常一覧 → 自分の商品は表示しない
                 $query = Item::where('user_id', '!=', $user->id)
                     ->with(['order', 'categories']);
             }
@@ -38,11 +38,12 @@ class ItemController extends Controller
 
             $products = $query->get();
         } else {
-            // 未ログインの場合 → 全商品
             $query = Item::with(['order', 'categories']);
+
             if ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
             }
+
             $products = $query->get();
         }
 
@@ -53,7 +54,7 @@ class ItemController extends Controller
     {
         // 商品詳細ページで「SOLDバッジ」を表示させるために order を読み込む
         $item = Item::with([
-            'order',               // ← 追加：購入済みかを判断するために必要
+            'order',
             'categories',
             'comments.user',
             'favoritedUsers'
