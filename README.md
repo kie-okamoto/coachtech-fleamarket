@@ -9,7 +9,7 @@ COACHTECH の フリマアプリケーションです。
 
 ### Docker ビルド
 
-1. git clone https://github.com/kie-okamoto/coachtech-fleamarket.git
+1. `git clone https://github.com/kie-okamoto/coachtech-fleamarket.git`
 2. Docker Desktop アプリを立ち上げる
 3. `docker compose up -d --build`
 
@@ -28,7 +28,7 @@ DB_DATABASE=laravel_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 
-# Stripeのキーは.envに設定（Gitには含めない）
+# Stripeの公開／秘密キーを.envに記載して使用（Gitなど公開リポジトリには含めないこと）
 STRIPE_KEY=your_stripe_public_key_here
 STRIPE_SECRET=your_stripe_secret_key_here
 
@@ -43,6 +43,46 @@ MAIL_FROM_NAME="Fleamarket"
 6. マイグレーションの実行 `php artisan migrate`
 7. シーディングの実行 `php artisan db:seed`
 8. ストレージリンクの作成 `php artisan storage:link`
+
+### テストの実行方法
+1. .env をコピーして .env.testing を作成 `cp .env .env.testing`
+
+```env
+APP_NAME=Laravel
+APP_ENV=testing
+APP_KEY=base64:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=
+APP_DEBUG=true
+APP_URL=http://localhost
+
+LOG_CHANNEL=stack
+LOG_LEVEL=debug
+
+DB_CONNECTION=sqlite
+DB_DATABASE=:memory:
+
+CACHE_DRIVER=array
+SESSION_DRIVER=array
+QUEUE_CONNECTION=sync
+
+MAIL_MAILER=smtp
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=null
+MAIL_FROM_NAME="${APP_NAME}"
+
+FILESYSTEM_DRIVER=local
+BROADCAST_DRIVER=log
+
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+MOCK_STRIPE=true
+```
+2. テスト実行 `php artisan test`
 
 ## 使用技術
 
