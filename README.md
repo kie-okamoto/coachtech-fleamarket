@@ -20,7 +20,7 @@ COACHTECH の フリマアプリケーションです。
 3. `.env.example` を `.env` にコピーまたは新規作成
 4. `.env` に以下を追加（DB 設定など）
 
-````env
+```env
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
@@ -32,7 +32,6 @@ DB_PASSWORD=laravel_pass
 
 - Stripeの「公開キー」「秘密キー」は `.env` ファイルに記載（Gitなど公開リポジトリには含めない）
 
-```env
 STRIPE_KEY=your_stripe_public_key_here
 STRIPE_SECRET=your_stripe_secret_key_here
 
@@ -41,7 +40,7 @@ MAIL_HOST=mailhog
 MAIL_PORT=1025
 MAIL_FROM_ADDRESS=example@example.com
 MAIL_FROM_NAME="Fleamarket"
-````
+```
 
 5. アプリケーションキーの作成 `php artisan key:generate`
 6. マイグレーションの実行 `php artisan migrate`
