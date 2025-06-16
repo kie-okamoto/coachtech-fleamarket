@@ -20,7 +20,7 @@ COACHTECH の フリマアプリケーションです。
 3. `.env.example` を `.env` にコピーまたは新規作成
 4. `.env` に以下を追加（DB 設定など）
 
-```env
+````env
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
@@ -28,7 +28,11 @@ DB_DATABASE=laravel_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 
-# Stripeの公開／秘密キーを.envに記載して使用（Gitなど公開リポジトリには含めないこと）
+# Stripeの設定について
+
+- Stripeの「公開キー」「秘密キー」は `.env` ファイルに記載（Gitなど公開リポジトリには含めない）
+
+```env
 STRIPE_KEY=your_stripe_public_key_here
 STRIPE_SECRET=your_stripe_secret_key_here
 
@@ -37,7 +41,7 @@ MAIL_HOST=mailhog
 MAIL_PORT=1025
 MAIL_FROM_ADDRESS=example@example.com
 MAIL_FROM_NAME="Fleamarket"
-```
+````
 
 5. アプリケーションキーの作成 `php artisan key:generate`
 6. マイグレーションの実行 `php artisan migrate`
@@ -45,6 +49,7 @@ MAIL_FROM_NAME="Fleamarket"
 8. ストレージリンクの作成 `php artisan storage:link`
 
 ### テストの実行方法
+
 1. .env をコピーして .env.testing を作成 `cp .env .env.testing`
 
 ```env
@@ -82,6 +87,7 @@ REDIS_PORT=6379
 
 MOCK_STRIPE=true
 ```
+
 2. テスト実行 `php artisan test`
 
 ## 使用技術
