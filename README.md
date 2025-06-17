@@ -9,7 +9,7 @@ COACHTECH の フリマアプリケーションです。
 
 ### Docker ビルド
 
-1. `git clone https://github.com/kie-okamoto/coachtech-fleamarket.git`
+1. git clone https://github.com/kie-okamoto/coachtech-fleamarket.git
 2. Docker Desktop アプリを立ち上げる
 3. `docker compose up -d --build`
 
