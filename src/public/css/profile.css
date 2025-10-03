@@ -13,14 +13,14 @@ body {
   padding: 0 20px;
 }
 
-/* プロフィールユーザー情報 */
+/* プロフィールユーザー情報（PCは折返しなし＝右端にボタン） */
 .profile__user {
   display: flex;
   align-items: center;
   gap: 30px;
   margin-bottom: 30px;
-  flex-wrap: wrap;
   margin-left: 100px;
+  flex-wrap: nowrap;
 }
 
 .profile__icon {
@@ -31,14 +31,23 @@ body {
   object-fit: cover;
 }
 
+/* 左側の塊：名前＋星を縦積み */
+.profile__info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
 .profile__name {
   font-size: 28px;
   font-weight: bold;
-  flex: 1;
-  align-self: center;
+  flex: 0 0 auto;
 }
 
 .profile__edit-button {
+  margin-left: auto;
   padding: 10px 25px;
   font-size: 18px;
   color: red;
@@ -48,7 +57,38 @@ body {
   white-space: nowrap;
 }
 
-/* ==== PROFILE TABS（mypage専用） ==== */
+/* ==== RATING (stars) ==== */
+.rating-stars {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+  line-height: 1;
+}
+
+.rating-stars .star {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  user-select: none;
+}
+
+.rating-stars .star::before {
+  content: "★";
+  font-size: 40px;
+  line-height: 1;
+  color: #cfcfcf;
+}
+
+.rating-stars .star.is-on::before {
+  color: #FFD400;
+  text-shadow: 0 0 0.5px rgba(0, 0, 0, .15);
+}
+
+/* ==== PROFILE TABS ==== */
 .tabs-wrapper {
   width: 100%;
   border-bottom: 2px solid gray;
@@ -70,6 +110,14 @@ body {
   gap: 30px;
 }
 
+.tabs li {
+  list-style: none;
+}
+
+.tabs li.is-active>a.tab {
+  color: red;
+}
+
 .tab {
   min-width: 120px;
   padding: 10px;
@@ -77,15 +125,33 @@ body {
   color: #666;
   text-decoration: none;
   font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   text-align: center;
-  display: inline-block;
 }
 
 .tab.active {
   color: red;
 }
 
-/* ==== PRODUCT GRID ==== */
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  min-width: 18px;
+  padding: 0 6px;
+  border-radius: 9999px;
+  background: #e60012;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+/* ==== PRODUCT GRID（出品した商品） ==== */
 .product-grid {
   max-width: 1375px;
   margin: 0 auto;
@@ -104,7 +170,6 @@ body {
   box-sizing: border-box;
 }
 
-/* 画像ラッパー */
 .product-image {
   position: relative;
   width: 100%;
@@ -119,20 +184,18 @@ body {
   border-radius: 4px;
 }
 
-/* 商品名 */
 .product-name {
   margin-top: 8px;
-  font-size: 14px;
   text-align: left;
   font-size: 20px;
+  color: #000;
 }
 
-/* SOLDバッジ */
 .sold-overlay {
   position: absolute;
   top: 8px;
   left: 8px;
-  background-color: rgba(255, 0, 0, 0.85);
+  background-color: rgba(255, 0, 0, .85);
   color: #fff;
   padding: 4px 8px;
   font-size: 12px;
@@ -141,8 +204,118 @@ body {
   z-index: 10;
 }
 
-/* ==== タブレット対応（768〜850px） ==== */
-@media screen and (min-width: 768px) and (max-width: 850px) {
+/* ===== マイページ：購入/取引中カード（出品と同スケール） ===== */
+.mypage-orders {
+  max-width: 1375px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.mypage-orders .card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 260px);
+  gap: 60px;
+  justify-content: start;
+}
+
+.mypage-orders .card {
+  position: relative;
+  display: block;
+  width: 260px;
+  text-decoration: none;
+}
+
+.mypage-orders .card__img {
+  display: block;
+  width: 260px;
+  height: 290px;
+  object-fit: cover;
+  border-radius: 4px;
+  background: #f5f5f5;
+}
+
+.mypage-orders .card__body {
+  padding-top: 8px;
+}
+
+.mypage-orders .card__title {
+  font-size: 20px;
+  color: #000;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.mypage-orders .notify-dot {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e60012;
+}
+
+/* ===== ここから：インラインから移動したルール ===== */
+
+/* 未読バッジ（取引中カード用） */
+.badge-unread {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  background: #e60012;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* 空表示（共通） */
+.no-items-message {
+  margin: 48px 0;
+  text-align: center;
+  color: #555;
+  font-size: 16px;
+}
+
+/* ====== レスポンシブ要件に合わせたブレークポイントのみ ====== */
+
+/* 1100px 以下… 3列 */
+@media (max-width: 1100px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 260px);
+  }
+
+  .mypage-orders .card-grid {
+    grid-template-columns: repeat(3, 260px);
+  }
+}
+
+/* タブレット帯 768–850px：2列・各種余白調整 */
+@media (max-width: 850px) and (min-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 260px);
+    gap: 40px;
+  }
+
+  .mypage-orders .card-grid {
+    grid-template-columns: repeat(2, 260px);
+    gap: 40px;
+  }
+
+  .tabs-container {
+    padding-left: 20px;
+  }
+
   .profile__user {
     margin-left: 20px;
   }
@@ -154,5 +327,12 @@ body {
   .profile__edit-button {
     font-size: 16px;
     padding: 8px 20px;
+  }
+
+  .tab-badge {
+    height: 16px;
+    min-width: 16px;
+    padding: 0 5px;
+    font-size: 11px;
   }
 }

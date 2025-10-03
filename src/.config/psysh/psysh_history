@@ -1,0 +1,14 @@
+_HiStOrY_V2_
+Mail::raw('MailHog\040test\040message',\040fn($m)\040=>\040$m->to('test@example.com')->subject('Test\040Mail'));
+$o\040=\040\134App\134Models\134Order::latest()->first();
+$o->completed_at\040=\040null;\040$o->save();
+exit
+$o\040=\040\134App\134Models\134Order::with('item.user','user')->find(<ID>);
+$o\040=\040\134App\134Models\134Order::with('item.user','user')->find(<3>);
+$o\040=\040\134App\134Models\134Order::with('item.user','user')->find(3);
+optional($o->item->user)->email;
+$o->forceFill(['completed_at'\040=>\040null])->save();
+$o->completed_at;
+exit
+$o\040=\040\134App\134Models\134Order::with('item.user','user')->find(3);
+Mail::to($o->item->user->email)->send(new\040\134App\134Mail\134TradeCompletedMail($o));
