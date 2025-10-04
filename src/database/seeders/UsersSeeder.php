@@ -13,18 +13,6 @@ class UsersSeeder extends Seeder
         // ここを DB に入れる相対パスに統一
         $dummy = 'profile_images/dummy.png';
 
-        // ── 管理者（固定: id=1） ─────────────────────────────
-        User::updateOrCreate(
-            ['id' => 1],
-            [
-                'name'              => 'admin',
-                'email'             => 'admin@example.com',
-                'password'          => Hash::make('admin1234'),
-                'email_verified_at' => now(),
-                'profile_image'     => $dummy,
-            ]
-        );
-
         // 出品者A
         User::updateOrCreate(
             ['email' => 'user_a@example.com'],
