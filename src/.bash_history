@@ -9,3 +9,6 @@ php artisan migrate
 php artisan tinker
 php artisan migrate:fresh --seed
 php artisan tinker
+php artisan migrate:refresh
+php artisan migrate:fresh --seed
+php artisan tinker

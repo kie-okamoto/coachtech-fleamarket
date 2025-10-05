@@ -15,3 +15,4 @@ Mail::to($o->item->user->email)->send(new\040\134App\134Mail\134TradeCompletedMa
 DB::select('SHOW\040INDEX\040FROM\040addresses');
 eixt
 DB::select('SHOW\040INDEX\040FROM\040addresses');
+Schema::hasColumn('orders',\040'completed_at');

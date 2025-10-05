@@ -42,9 +42,8 @@ STRIPE_SECRET=your_stripe_secret_key_here
 ```
 
 5. アプリケーションキーの作成 `php artisan key:generate`
-6. マイグレーションの実行 `php artisan migrate`
-7. シーディングの実行 `php artisan db:seed`
-8. ストレージリンクの作成 `php artisan storage:link`
+6. マイグレーションとシーディングの実行 `php artisan migrate:fresh --seed`
+7. ストレージリンクの作成 `php artisan storage:link`
 
 ### テストの実行方法
 
