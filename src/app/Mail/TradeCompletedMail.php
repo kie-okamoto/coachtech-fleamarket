@@ -11,11 +11,10 @@ class TradeCompletedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public Order $order; // ビューに渡す用
+    public Order $order;
 
     public function __construct(Order $order)
     {
-        // 必要な関連をロードしておく（N+1/ヌル対策）
         $this->order = $order->loadMissing(['item.user', 'user']);
     }
 

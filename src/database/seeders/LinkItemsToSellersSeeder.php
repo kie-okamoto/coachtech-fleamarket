@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;   // ← これを使う
+use Illuminate\Support\Facades\Schema;
 use App\Models\User;
 use App\Models\Item;
 
@@ -27,12 +27,12 @@ class LinkItemsToSellersSeeder extends Seeder
                 Item::whereIn('code', ['C006', 'C007', 'C008', 'C009', 'C010'])
                     ->update(['user_id' => $sellerB->id]);
 
-                // PHP7.4 なので null-safe は使わず通常の -> を使用
+
                 $this->command->info('Linked items by code column (C001–C010).');
                 return;
             }
 
-            // 3) code 列が無い場合：商品名で対応（あなたのDBの商品名に合わせて調整）
+
             $groupA = ['腕時計', 'HDD', '玉ねぎ3束', '革靴', 'ノートPC'];
             $groupB = ['マイク', 'ショルダーバッグ', 'タンブラー', 'コーヒーミル', 'メイクセット'];
 

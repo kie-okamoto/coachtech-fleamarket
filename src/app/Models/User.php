@@ -30,8 +30,6 @@ class User extends Authenticatable implements MustVerifyEmail
     /** キャスト */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        // Laravel 10+ なら有効化で自動ハッシュ。9以下はコメントのまま。
-        // 'password' => 'hashed',
     ];
 
     /** 出品アイテム（1:N） */

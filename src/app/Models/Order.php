@@ -19,7 +19,6 @@ class Order extends Model
         'item_id',
         'address_id',
         'payment_method',
-        // 'completed_at' は手動更新想定のため fillable には含めないでOK
     ];
 
     /** 購入者(User) */
@@ -58,18 +57,13 @@ class Order extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * 出品者(User) を返すヘルパ
-     * Item が未設定のケースに備えて null セーフに。
-     */
+
     public function sellerUser(): ?User
     {
         return optional($this->item)->user;
     }
 
-    /**
-     * この取引を指定ユーザーが既に評価済みか？
-     */
+
     public function isReviewedBy(User $user): bool
     {
         return $this->tradeReviews()
@@ -77,19 +71,15 @@ class Order extends Model
             ->exists();
     }
 
-    /**
-     * 取引参加者（購入者＋出品者）のユーザーID配列
-     */
+
     public function participants(): array
     {
         $buyerId  = $this->user_id;
-        $sellerId = optional($this->item)->user_id; // item 未設定でも安全
+        $sellerId = optional($this->item)->user_id;
         return array_values(array_filter([$buyerId, $sellerId]));
     }
 
-    /**
-     * 指定ユーザーがこの取引の参加者か？
-     */
+
     public function isParticipant(User $user): bool
     {
         return in_array($user->id, $this->participants(), true);

@@ -23,7 +23,6 @@ class ItemController extends Controller
                 $query = Item::where('user_id', '!=', $user->id)
                     ->with(['order', 'categories']);
             } elseif ($page === 'buy') {
-                // ★ここが正しく関数の中にあればOK
                 $query = Item::whereIn('id', $user->favorites()->pluck('item_id'))
                     ->where('user_id', '!=', $user->id)
                     ->with(['order', 'categories']);
@@ -70,7 +69,6 @@ class ItemController extends Controller
     }
 
 
-    // 修正：ExhibitionRequest に差し替え
     public function store(ExhibitionRequest $request)
     {
         $imagePath = $request->file('image')->store('image', 'public');

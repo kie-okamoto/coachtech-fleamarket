@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\TradeMessage;
-use App\Models\TradeMessageRead; // 既読管理
-use App\Models\TradeReview;      // 評価モデル
+use App\Models\TradeMessageRead;
+use App\Models\TradeReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-// ★ 追加：メール送信用
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TradeCompletedMail;
 
@@ -83,7 +82,7 @@ class TradeController extends Controller
             });
         }
 
-        // ▼ この取引を開いた時点で既読更新（自分の last_read_at を今に）
+        // ▼ この取引を開いた時点で既読更新
         TradeMessageRead::updateOrCreate(
             ['order_id' => $order->id, 'user_id' => $uid],
             ['last_read_at' => now()]
