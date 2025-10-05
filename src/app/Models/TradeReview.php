@@ -11,7 +11,6 @@ class TradeReview extends Model
         'rater_id',
         'rated_user_id',
         'score',
-        'comment',
     ];
 
     public function order()

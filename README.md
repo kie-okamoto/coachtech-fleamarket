@@ -15,7 +15,7 @@ COACHTECH のフリマアプリケーションです。
 
 ### Laravel 環境構築
 
-1. `docker compose exec app bash`
+1. `docker compose exec php bash`
 2. `composer install`
 3. `.env.example` を `.env` にコピーまたは新規作成
 4. `.env` に以下を追加（DB・メール・Stripe 設定など）
@@ -34,7 +34,8 @@ MAIL_FROM_ADDRESS=example@example.com
 MAIL_FROM_NAME="Fleamarket"
 ```
 
-Stripeの「公開キー」「秘密キー」は `.env` ファイルに記載（Gitなど公開リポジトリには含めない）
+Stripe の「公開キー」「秘密キー」は `.env` ファイルに記載（Git など公開リポジトリには含めない）
+
 ```env
 STRIPE_KEY=your_stripe_public_key_here
 STRIPE_SECRET=your_stripe_secret_key_here
@@ -90,7 +91,7 @@ MOCK_STRIPE=true
 ## 使用技術
 
 - Laravel 8.83.8
-- PHP 8.1.32
+- PHP 7.4.9
 - MySQL 8.0.26
 - Docker / Docker Compose
 - Laravel Fortify（メール認証あり）
@@ -103,17 +104,11 @@ Seeder により以下のユーザー情報が初期登録されます。
 
 ### 一般ユーザー（メール認証済）
 
-| 氏名           | メールアドレス    | パスワード |
-| -------------- | ----------------- | ---------- |
-| 出品者 A　　　  | user_a@example.com | aaaa1234 |
-| 出品者 B　      | user_b@example.com |bbbbb1234 |
-| 出品者 C        | user_c@example.com | cccc1234 |
-
-### 管理者ユーザー
-
-| 氏名           | メールアドレス    | パスワード |
-| -------------- | ----------------- | ---------- |
-| 管理者ユーザー | admin@example.com | admin1234   |
+| 名前   | メールアドレス     | パスワード | 備考                               |
+| ------ | ------------------ | ---------- | ---------------------------------- |
+| User A | user_a@example.com | aaaa1234   | 出品者（商品 CO01 ～ CO05 を出品） |
+| User B | user_b@example.com | bbbb1234   | 出品者（商品 CO06 ～ CO10 を出品） |
+| User C | user_c@example.com | cccc1234   | 出品なしユーザー                   |
 
 ## ER 図
 

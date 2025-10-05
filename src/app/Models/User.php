@@ -30,7 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /** キャスト */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        // Laravel 10 以上なら有効化で自動ハッシュ。9以下ならこの行は削除してください。
+        // Laravel 10+ なら有効化で自動ハッシュ。9以下はコメントのまま。
         // 'password' => 'hashed',
     ];
 
@@ -86,10 +86,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Address::class, 'user_id', 'id');
     }
 
-    /**
-     * 自分が関与する（購入者 or 出品者）注文だけを返すクエリビルダ
-     * 例: $user->involvedOrders()->with('item.user')->latest()->paginate(12);
-     */
+    /** 自分が関与する（購入者 or 出品者）注文クエリ */
     public function involvedOrders()
     {
         return Order::query()
@@ -97,19 +94,18 @@ class User extends Authenticatable implements MustVerifyEmail
             ->orWhereHas('item', fn($q) => $q->where('user_id', $this->id)); // 自分が出品者
     }
 
-    /** ヘルパー：このユーザーは item の出品者か？ */
+    /** ヘルパー */
     public function isSellerOf(Item $item): bool
     {
         return (int) $item->user_id === (int) $this->id;
     }
 
-    /** ヘルパー：このユーザーは order の購入者か？ */
     public function isBuyerOf(Order $order): bool
     {
         return (int) $order->user_id === (int) $this->id;
     }
 
-    /** アクセサ：プロフィール画像のURL（ストレージ想定、無ければ適当なプレースホルダへ） */
+    /** プロフィール画像URL */
     public function getProfileImageUrlAttribute(): string
     {
         if (!$this->profile_image) {
@@ -118,17 +114,18 @@ class User extends Authenticatable implements MustVerifyEmail
         return asset('storage/' . ltrim($this->profile_image, '/'));
     }
 
-    public function tradeMessages()
+    /** 取引系 */
+    public function tradeMessages(): HasMany
     {
         return $this->hasMany(\App\Models\TradeMessage::class);
     }
 
-    public function receivedReviews()  // 受けた評価
+    public function receivedReviews(): HasMany  // 受けた評価
     {
         return $this->hasMany(\App\Models\TradeReview::class, 'rated_user_id');
     }
 
-    public function givenReviews()     // 自分が与えた評価
+    public function givenReviews(): HasMany     // 自分が与えた評価
     {
         return $this->hasMany(\App\Models\TradeReview::class, 'rater_id');
     }

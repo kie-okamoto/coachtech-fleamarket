@@ -12,3 +12,6 @@ $o->completed_at;
 exit
 $o\040=\040\134App\134Models\134Order::with('item.user','user')->find(3);
 Mail::to($o->item->user->email)->send(new\040\134App\134Mail\134TradeCompletedMail($o));
+DB::select('SHOW\040INDEX\040FROM\040addresses');
+eixt
+DB::select('SHOW\040INDEX\040FROM\040addresses');

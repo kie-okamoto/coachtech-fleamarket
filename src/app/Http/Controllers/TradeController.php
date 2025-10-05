@@ -153,8 +153,8 @@ class TradeController extends Controller
     }
 
     /**
-     * 取引を完了（購入者のみ）。完了後にレビュー用モーダルを出す。
-     * 完了へ初めて遷移したタイミングで出品者に完了メールを送信。
+     * 取引を完了（購入者のみ）。完了へ初めて遷移したタイミングで出品者に完了メールを送信。
+     * 完了後にレビュー用モーダルを出す。
      */
     public function finish(Order $order)
     {
@@ -206,9 +206,9 @@ class TradeController extends Controller
             409
         );
 
+        // ★ コメントは廃止：スコアのみ受け取る
         $data = $request->validate([
-            'score'   => ['required', 'integer', 'between:1,5'],
-            'comment' => ['nullable', 'string', 'max:500'],
+            'score' => ['required', 'integer', 'between:1,5'],
         ]);
 
         // 相手（被評価者）を自動判定
@@ -220,7 +220,6 @@ class TradeController extends Controller
             'rater_id'      => $uid,
             'rated_user_id' => $revieweeId,
             'score'         => (int) $data['score'],
-            'comment'       => $data['comment'] ?? null,
         ]);
 
         // 評価後は商品一覧へ

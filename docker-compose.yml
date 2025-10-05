@@ -33,6 +33,8 @@ services:
     volumes:
       - ./docker/mysql/data:/var/lib/mysql
       - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - "3307:3306"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

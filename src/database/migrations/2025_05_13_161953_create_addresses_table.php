@@ -10,11 +10,17 @@ class CreateAddressesTable extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('postal_code');
-            $table->string('address');
-            $table->string('building')->nullable();
-            $table->timestamps();
+
+            // 1ユーザー = 1住所 を保証するために unique() を追加
+            $table->foreignId('user_id')
+                ->constrained()
+                ->onDelete('cascade')
+                ->unique();
+
+            $table->string('postal_code');        // 郵便番号
+            $table->string('address');            // 住所
+            $table->string('building')->nullable(); // 建物名（任意）
+            $table->timestamps();                 // created_at / updated_at
         });
     }
 
