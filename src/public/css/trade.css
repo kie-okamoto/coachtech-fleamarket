@@ -204,6 +204,7 @@
   gap: 22px;
 }
 
+/* 旧: 行レイアウト（残してOK／不要なら削除可） */
 .chat-row {
   display: flex;
   flex-direction: column;
@@ -227,6 +228,44 @@
 
 .chat-meta--left {
   flex-direction: row-reverse;
+}
+
+/* 新: 「上：アイコン＋名前／下：吹き出し」用 */
+.chat-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 720px;
+  /* 吹き出し幅と合わせる */
+}
+
+.chat-block--left {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.chat-block--right {
+  align-items: flex-end;
+  text-align: right;
+  margin-left: auto;
+}
+
+.chat-meta-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+}
+
+.chat-meta-line--right {
+  justify-content: flex-end;
+}
+
+.chat-avatar-img {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 9999px;
 }
 
 .chat-name {
@@ -364,7 +403,6 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  /* ここがポイント：中央配置用のグリッド */
   place-items: center;
   /* is-active時に効く */
 }
@@ -488,32 +526,26 @@
 }
 
 /* ── 区切り線の追加 ───────────────────────── */
-
-/* タイトル下に1px線（= タイトルとサブタイトルの間） */
 .review-title {
   border-bottom: 1px solid #000;
   padding-bottom: 8px;
-  /* 線と文字の間 */
   margin-bottom: 12px;
-  /* 線と次要素の間 */
 }
 
 /* 星と送信ボタンの間に1px線 */
 .rating {
-  /* 既存: inline-flex → 全幅にしたいので flex + width:100% に上書き */
   display: flex !important;
+  /* 全幅にしたいので flex に */
   width: 100%;
   justify-content: center;
   border-bottom: 1px solid #000;
   padding-bottom: 12px;
-  /* 線の上側の余白（星と線の間） */
+  /* 上側余白 */
   margin-bottom: 12px;
-  /* 線の下側の余白（線とボタンの間） */
+  /* 下側余白 */
 }
 
 /* ===== 編集フォーム（更新／キャンセル） ===== */
-
-/* ラッパー（行揃え） */
 .chat-edit__actions {
   display: flex;
   align-items: center;
@@ -521,7 +553,6 @@
   margin-top: 8px;
 }
 
-/* 入力欄 */
 .chat-edit__input {
   width: 100%;
   box-sizing: border-box;
@@ -531,10 +562,9 @@
   font-size: 16px;
 }
 
-/* ボタン共通（①文字サイズを同じに） */
+/* ボタン共通 */
 .btn {
   font-size: 16px;
-  /* ←双方このサイズで統一 */
   font-weight: 700;
   line-height: 1;
   padding: 8px 16px;
@@ -543,21 +573,18 @@
   cursor: pointer;
 }
 
-/* ②更新ボタン：文字色 #ff8282、同色の枠で囲む */
 .btn--update {
   color: #ff8282;
   border: 2px solid #ff8282;
   background: #fff;
 }
 
-/* ③キャンセルボタン：枠なし・黒文字 */
 .btn--cancel {
   color: #000;
   border: none;
   background: transparent;
 }
 
-/* 任意のホバー効果（不要なら削除OK） */
 .btn--update:hover {
   background: #fff6f6;
 }

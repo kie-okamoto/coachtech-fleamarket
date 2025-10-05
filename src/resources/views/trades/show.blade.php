@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}">
   <link rel="stylesheet" href="{{ asset('css/common.css') }}">
   <link rel="stylesheet" href="{{ asset('css/trade.css') }}">
+
 </head>
 
 <body>
@@ -108,52 +109,59 @@
           $icon = ($user && $user->profile_image) ? asset('storage/'.$user->profile_image) : asset('images/no_profile.png');
           @endphp
 
-          <li class="chat-row {{ $isMine ? 'chat-row--right' : '' }}">
-            <div class="chat-meta {{ $isMine ? 'chat-meta--right' : 'chat-meta--left' }}">
-              <div class="chat-avatar">
-                <img src="{{ $icon }}" alt="{{ $userName }} のアイコン">
-              </div>
-              <span class="chat-name">{{ $userName }}</span>
-            </div>
+          <li class="chat-row">
+            {{-- ★ 左右どちらも「上：アイコン＋名前」「下：メッセージ」構造に統一 --}}
+            <div class="chat-block {{ $isMine ? 'chat-block--right' : 'chat-block--left' }}">
 
-            <div class="chat-bubble {{ $isMine ? 'chat-bubble--mine' : '' }}" id="bubble-{{ $msg->id }}">
-              {{ $msg->body }}
-              @if ($msg->image_path)
-              <div style="margin-top:8px;">
-                <img src="{{ asset('storage/'.$msg->image_path) }}" alt="添付画像" style="max-width:320px;height:auto;border-radius:8px;">
+              {{-- 上段：メタ行（左＝アイコン→名前 / 右＝名前→アイコン） --}}
+              <div class="chat-meta-line {{ $isMine ? 'chat-meta-line--right' : '' }}">
+                @if($isMine)
+                <span class="chat-name">{{ $userName }}</span>
+                <img src="{{ $icon }}" alt="{{ $userName }} のアイコン" class="chat-avatar-img">
+                @else
+                <img src="{{ $icon }}" alt="{{ $userName }} のアイコン" class="chat-avatar-img">
+                <span class="chat-name">{{ $userName }}</span>
+                @endif
+              </div>
+
+              {{-- 下段：本文（吹き出し） --}}
+              <div class="chat-bubble {{ $isMine ? 'chat-bubble--mine' : '' }}" id="bubble-{{ $msg->id }}">
+                {{ $msg->body }}
+                @if ($msg->image_path)
+                <div style="margin-top:8px;">
+                  <img src="{{ asset('storage/'.$msg->image_path) }}" alt="添付画像" style="max-width:320px;height:auto;border-radius:8px;">
+                </div>
+                @endif
+              </div>
+
+              {{-- 自分のメッセージのみ：編集・削除 --}}
+              @if ($isMine)
+              <form id="edit-form-{{ $msg->id }}"
+                class="chat-bubble chat-bubble--mine"
+                style="display:none; max-width:760px;"
+                method="post"
+                action="{{ route('trades.messages.update', [$order, $msg]) }}">
+                @csrf
+                @method('PATCH')
+                <textarea name="body" rows="3" class="chat-edit__input" required>{{ old('body', $msg->body) }}</textarea>
+                <div class="chat-edit__actions">
+                  <button type="submit" class="btn btn--update">更新</button>
+                  <button type="button" class="btn btn--cancel" onclick="toggleEdit({{ $msg->id }}, false)">キャンセル</button>
+                </div>
+              </form>
+
+              <div class="chat-actions">
+                <button class="chat-action" type="button" onclick="toggleEdit({{ $msg->id }}, true)">編集</button>
+                <form method="post" action="{{ route('trades.messages.destroy', [$order, $msg]) }}"
+                  onsubmit="return confirm('このメッセージを削除しますか？')" style="display:inline;">
+                  @csrf
+                  @method('DELETE')
+                  <button class="chat-action" type="submit">削除</button>
+                </form>
               </div>
               @endif
+
             </div>
-
-            @if ($isMine)
-            {{-- ▼ 編集フォーム（クラス化してCSS適用） --}}
-            <form id="edit-form-{{ $msg->id }}"
-              class="chat-bubble chat-bubble--mine"
-              style="display:none; max-width:720px;"
-              method="post"
-              action="{{ route('trades.messages.update', [$order, $msg]) }}">
-              @csrf
-              @method('PATCH')
-
-              <textarea name="body" rows="3" class="chat-edit__input" required>{{ old('body', $msg->body) }}</textarea>
-
-              <div class="chat-edit__actions">
-                <button type="submit" class="btn btn--update">更新</button>
-                <button type="button" class="btn btn--cancel" onclick="toggleEdit({{ $msg->id }}, false)">キャンセル</button>
-              </div>
-            </form>
-            {{-- ▲ 編集フォーム --}}
-
-            <div class="chat-actions">
-              <button class="chat-action" type="button" onclick="toggleEdit({{ $msg->id }}, true)">編集</button>
-              <form method="post" action="{{ route('trades.messages.destroy', [$order, $msg]) }}"
-                onsubmit="return confirm('このメッセージを削除しますか？')" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button class="chat-action" type="submit">削除</button>
-              </form>
-            </div>
-            @endif
           </li>
           @endforeach
         </ul>
@@ -186,15 +194,11 @@
     </main>
   </div>
 
-  {{-- 評価モーダル（購入者・出品者 共通／完了後・未レビューなら表示） --}}
+  {{-- 評価モーダル --}}
   @if (($show_review_modal ?? false) || session('show_review_modal'))
-  <div id="reviewModal"
-    class="modal is-active"
-    aria-hidden="false">
+  <div id="reviewModal" class="modal is-active" aria-hidden="false">
     <div class="modal__overlay" data-modal-close></div>
-
     <div class="modal__content review-panel" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
-
       <h2 id="reviewModalTitle" class="review-title">取引が完了しました。</h2>
       <p class="review-subtitle">今回の取引相手はどうでしたか？</p>
 
@@ -206,15 +210,12 @@
 
       <form method="POST" action="{{ route('trades.reviews.store', $order) }}" id="reviewForm">
         @csrf
-
-        {{-- ★ 星のみ（コメント欄なし） --}}
         <div class="rating" aria-label="星で評価（1〜5）">
           @for($i = 5; $i >= 1; $i--)
           <input type="radio" name="score" id="star{{ $i }}" value="{{ $i }}" @checked(old('score')==$i) required>
           <label for="star{{ $i }}">★</label>
           @endfor
         </div>
-
         <div class="modal__actions">
           <button type="submit" class="btn btn-primary" id="reviewSubmit">送信する</button>
         </div>
@@ -222,7 +223,6 @@
     </div>
   </div>
   @endif
-
 
   <script>
     function toggleEdit(id, show) {
@@ -254,10 +254,8 @@
       });
 
       input.addEventListener('input', () => localStorage.setItem(key, input.value));
-
       const form = input.closest('form');
       if (form) form.addEventListener('submit', () => localStorage.removeItem(key));
-
       window.addEventListener('storage', (e) => {
         if (e.key === key && e.storageArea === localStorage) input.value = e.newValue || '';
       });
@@ -267,7 +265,6 @@
     (function() {
       const modal = document.getElementById('reviewModal');
       if (!modal) return;
-
       const close = () => {
         modal.classList.remove('is-active');
         modal.setAttribute('aria-hidden', 'true');
@@ -275,7 +272,6 @@
       modal.addEventListener('click', (e) => {
         if (e.target.matches('[data-modal-close], .modal__overlay')) close();
       });
-
       const form = document.getElementById('reviewForm');
       const submitBtn = document.getElementById('reviewSubmit');
       if (form && submitBtn) form.addEventListener('submit', () => {
